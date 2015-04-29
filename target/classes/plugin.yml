@@ -1,0 +1,6 @@
+name: EduCraft
+main: com.kodingkingdom.educraft.EduCraftPlugin
+version: 0.0.1
+commands:
+   edu:
+   educraft:
