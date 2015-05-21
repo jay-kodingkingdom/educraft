@@ -1,5 +1,8 @@
 package com.kodingkingdom.educraft;
 
-public class Student {
+import java.util.UUID;
 
-}
+public class Student {
+	UUID id;
+	public UUID getId(){
+		return id;}}
