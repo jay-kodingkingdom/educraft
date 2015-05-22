@@ -12,8 +12,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
     </plugins>    
@@ -56,6 +56,13 @@
       <groupId>com.wimbli</groupId>
       <artifactId>WorldBorder</artifactId>
       <version>1.8.3</version>
+      <type>jar</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.worldcretornica</groupId>
+      <artifactId>plotme</artifactId>
+      <version>0.13g-SNAPSHOT</version>
       <type>jar</type>
       <scope>provided</scope>
     </dependency>

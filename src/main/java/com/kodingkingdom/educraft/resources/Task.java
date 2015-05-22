@@ -8,19 +8,19 @@ public class Task {
 
 	HashMap<Student,TaskItem> studentTaskMap;
 
-	public final TaskItem assign(Student taskStudent){
+	public final TaskItem give(Student taskStudent){
 		TaskItem taskItem = new TaskItem(taskStudent);
 		studentTaskMap.put(taskStudent, taskItem);
 		assignAction(taskItem);
 		return taskItem;}
 
-	public final TaskItem unassign(Student taskStudent){
+	public final TaskItem ungive(Student taskStudent){
 		TaskItem taskItem = studentTaskMap.get(taskStudent);
 		studentTaskMap.remove(taskStudent);
 		unassignAction(taskItem);
 		return taskItem;}
 	
-	public final TaskItem mark(Student taskStudent){
+	public final TaskItem take(Student taskStudent){
 		TaskItem taskItem = studentTaskMap.get(taskStudent);
 		studentTaskMap.remove(taskStudent);
 		markAction(taskItem);

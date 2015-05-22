@@ -6,13 +6,13 @@ import com.kodingkingdom.educraft.Student;
 
 public class Lock {
 
-	HashMap<Student,LockItem> studentLockMap;
+	protected HashMap<Student,LockItem> studentLockMap;
 
-	public final void lock(Student lockStudent){
+	public final void give(Student lockStudent){
 		LockItem lockItem = new LockItem(lockStudent);
 		studentLockMap.put(lockStudent, lockItem);
 		lockAction(lockItem);}
-	public final void unlock(Student lockStudent){
+	public final void take(Student lockStudent){
 		LockItem lockItem = studentLockMap.get(lockStudent);
 		studentLockMap.remove(lockStudent);
 		unlockAction(lockItem);}
