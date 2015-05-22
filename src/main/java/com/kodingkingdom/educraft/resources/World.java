@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
@@ -20,12 +21,50 @@ import com.wimbli.WorldBorder.WorldBorder;
 import com.wimbli.WorldBorder.WorldTrimTask;
 
 public class World {
+	private static MultiverseCore multiverseCore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
 	private static String universeId = "eduCraft_universe";
+	
+	public static String getUniverseId(){
+		return universeId;}
 
 	private static HashSet<World> worlds;
 	
-	private static int expandFactor = 2;
+	
 	private static Region worldsRegion;
+	private static int expandFactor = 2;
+	
+	
+	
+	
+	public class WorldItem{
+		String worldId;
+		Student worldStudent;
+		
+		private WorldItem(){}
+				
+		public Student getStudent(){
+			return worldStudent;}
+		public World getWorld(){
+			return World.this;}}
+	
+	
+	
+	
+	public class XZ{
+		private float X;
+		private float Z;
+		public XZ(float x, float z){
+			X=x;Z=z;}
+		public float getX(){
+			return X;}
+		public float getZ(){
+			return Z;}
+		public XZ add(XZ XZ2){
+			return new XZ(this.X+XZ2.X,this.Z+XZ2.Z);}
+		public XZ minus(XZ XZ2){
+			return new XZ(this.X-XZ2.X,this.Z-XZ2.Z);}
+		public XZ expand(int factor){
+			return new XZ(this.X*factor,this.Z*factor);}}
 	public class Region{
 		public XZ minXZ;
 		public XZ maxXZ;
@@ -50,30 +89,6 @@ public class World {
 				else {
 					Region sub2Insert = subRegion2.insert(size);
 					return sub2Insert;}}}}
-	
-	public String getUniverseId(){
-		return universeId;}
-	
-	private String name;
-	private XZ minXZ;
-	private XZ maxXZ;
-	private Position spawnPoint;
-
-	public class XZ{
-		private float X;
-		private float Z;
-		public XZ(float x, float z){
-			X=x;Z=z;}
-		public float getX(){
-			return X;}
-		public float getZ(){
-			return Z;}
-		public XZ add(XZ XZ2){
-			return new XZ(this.X+XZ2.X,this.Z+XZ2.Z);}
-		public XZ minus(XZ XZ2){
-			return new XZ(this.X-XZ2.X,this.Z-XZ2.Z);}
-		public XZ expand(int factor){
-			return new XZ(this.X*factor,this.Z*factor);}}
 	public class Position{
 		private float X;
 		private float Z;
@@ -86,15 +101,28 @@ public class World {
 			return Z;}
 		public float getY(){
 			return Y;}}
-
-	private World(){}	
+	
+	
 	public static XZ xZ(float X, float Z){
 		return new World().new XZ(X,Z);}
 	public static Region region(XZ MinXZ, XZ MaxXZ){
 		return new World().new Region(MinXZ,MaxXZ);}
 	public static Position position(float X, float Z, float Y){
 		return new World().new Position(X,Z,Y);}
-	public static World initializeWorld(String Name, Region MVRegion, String MVId, Position SpawnPoint){
+
+
+	private World(){}
+	
+	private String name;
+	private Region region;
+	private Position spawnPoint;
+
+	private HashMap<Student,HashSet<WorldItem>> studentWorldsMap;
+
+	
+	
+	
+	public static World createWorld(String Name, Region MVRegion, String MVId, Position SpawnPoint){
 		World world = new World();
 		
 		world.name=Name;
@@ -111,81 +139,62 @@ public class World {
 				MVRegion.maxXZ.minus(MVRegion.minXZ),
 				MV,universeMV);
 		
-		world.minXZ=worldRegion.minXZ;
-		world.maxXZ=worldRegion.maxXZ;
+		world.region=worldRegion;
 		world.spawnPoint=world.new Position(SpawnPoint.X+worldRegion.minXZ.minus(MVRegion.minXZ).X,
 				SpawnPoint.Y,SpawnPoint.Z+worldRegion.minXZ.minus(MVRegion.minXZ).Z);
 		
 		worlds.add(world);
 		
 		return world;}
-
-	static MultiverseCore multiverseCore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
+	public static World copyWorld(World world, String Name){
+		return createWorld(Name, world.region, universeId, world.spawnPoint);}
+	public static void deleteWorld(World world){
+		org.bukkit.World universeMV = Bukkit.getServer().createWorld(new WorldCreator(universeId));
+		
+		world.deleteRegion(world.region, universeMV);
+		
+		world.name=null;
+		world.region=null;
+		world.spawnPoint=null;
+		world.studentWorldsMap=null;
+		
+		worlds.remove(world);}
 	
-	HashMap<Student,HashSet<WorldItem>> studentWorldsMap;
-
-	public final WorldItem[] createWorld(Student... worldStudents){
+	
+	
+	
+	public final WorldItem[] giveWorld(Student... worldStudents){
 		try {
-			WorldItem[] worldItems=initializeWorld(worldStudents);
+			WorldItem[] worldItems=prepareWorld(worldStudents);
 			
 			for (WorldItem worldItem : worldItems) studentWorldsMap.get(worldItem.worldStudent).add(worldItem);
 			return worldItems;}
 		catch (Exception e){
 			throw new RuntimeException("Could not create worlds");}}
-	public final WorldItem createWorld(Student worldStudent){
+	public final WorldItem giveWorld(Student worldStudent){
 		try {
-			WorldItem worldItem=initializeWorld(worldStudent)[0];
+			WorldItem worldItem=prepareWorld(worldStudent)[0];
 			
 			studentWorldsMap.get(worldStudent).add(worldItem);
 			return worldItem;}
 		catch (Exception e){
 			throw new RuntimeException("Could not create world");}}
-	public final void destroyWorld(WorldItem worldItem){
+	public final void takeWorld(WorldItem worldItem){
 		com.wimbli.WorldBorder.Config.removeBorder(worldItem.worldId);
 		multiverseCore.getMVWorldManager().deleteWorld(worldItem.worldId, true, true);
 		studentWorldsMap.get(worldItem.getStudent()).remove(worldItem);}	
 	
-	private final void copyRegion(XZ fromXZ, XZ toXZ, XZ regionSize, org.bukkit.World fromMV, org.bukkit.World toMV){
-		for(float X=fromXZ.X;X<=fromXZ.X+regionSize.X;X++){
-			for (float Z=fromXZ.Z;Z<=fromXZ.Z+regionSize.Z;Z++){
-				Block fromBlock = fromMV.getBlockAt(new Location(fromMV, X, 0, Z));
-				Block toBlock = toMV.getBlockAt(new Location(toMV, X + toXZ.X - fromXZ.X, 0, Z + toXZ.Z - fromXZ.Z));
-				
-				String fromBiome = fromBlock.getBiome().name();
-				toBlock.setBiome(Biome.valueOf(fromBiome));
-				for(int Y = 0; Y < toMV.getMaxHeight() ; Y++){
-					fromBlock = fromMV.getBlockAt(new Location(fromMV, X, Y, Z));
-                    int fromType = fromBlock.getTypeId();
-                    byte fromData = fromBlock.getData();
-					
-                    toBlock = toMV.getBlockAt(new Location(toMV, X + toXZ.X - fromXZ.X, Y, Z + toXZ.Z - fromXZ.Z));
-                    toBlock.setTypeIdAndData(fromType, fromData, false);
-                    toBlock.setData(fromData);}}}}
-	private final void trimWorld(String worldId){
-		int trimFrequency = 5000;
-		int trimPadding = CoordXZ.chunkToBlock(13);
-		int ticks = 1, repeats = 1;
-		if (trimFrequency > 20)
-			repeats = trimFrequency / 20;
-		else
-			ticks = 20 / trimFrequency;
-
-		WorldTrimTask trimTask = new WorldTrimTask(Bukkit.getServer(), null, worldId, trimPadding, repeats);
-		if (trimTask.valid()){
-			int task = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(WorldBorder.plugin, Config.trimTask, ticks, ticks);
-			trimTask.setTaskID(task);}
-		else
-			throw new RuntimeException();}
 	
 	
-	private final WorldItem[] initializeWorld(Student... worldStudents){
+	
+	private final WorldItem[] prepareWorld(Student... worldStudents){
 		WorldItem[] worldItems = new WorldItem[worldStudents.length]; 
 		
 		final org.bukkit.World universeMV = Bukkit.getServer().createWorld(new WorldCreator(universeId));
-		final float widthX = (maxXZ.X-minXZ.X);
-		final float lengthZ = (maxXZ.Z-minXZ.Z);		
-		final float distanceX = minXZ.X + widthX/2;
-		final float distanceZ = minXZ.Z + lengthZ/2;
+		final float widthX = (region.maxXZ.minus(region.minXZ)).X;
+		final float lengthZ = (region.maxXZ.minus(region.minXZ)).Z;		
+		final float distanceX = region.minXZ.X + widthX/2;
+		final float distanceZ = region.minXZ.Z + lengthZ/2;
 
 		String masterWorldId=null;
 		
@@ -203,7 +212,7 @@ public class World {
 						throw new RuntimeException();				
 
 				org.bukkit.World worldMV = Bukkit.getServer().createWorld(new WorldCreator(worldId));
-				copyRegion(minXZ,
+				copyRegion(region.minXZ,
 						new XZ(-widthX/2,-lengthZ/2),
 						new XZ(widthX,lengthZ),
 						universeMV,worldMV);
@@ -220,14 +229,40 @@ public class World {
 				com.wimbli.WorldBorder.Config.setBorderCorners(worldId, -widthX, -lengthZ, widthX, lengthZ, false);}}
 		
 		return worldItems;}
-	
-	public class WorldItem{
-		String worldId;
-		Student worldStudent;
-		
-		private WorldItem(){}
+	private final void copyRegion(XZ fromXZ, XZ toXZ, XZ regionSize, org.bukkit.World fromMV, org.bukkit.World toMV){
+		for(float X=fromXZ.X;X<=fromXZ.X+regionSize.X;X++){
+			for (float Z=fromXZ.Z;Z<=fromXZ.Z+regionSize.Z;Z++){
+				Block fromBlock = fromMV.getBlockAt(new Location(fromMV, X, 0, Z));
+				Block toBlock = toMV.getBlockAt(new Location(toMV, X + toXZ.X - fromXZ.X, 0, Z + toXZ.Z - fromXZ.Z));
 				
-		public Student getStudent(){
-			return worldStudent;}
-		public World getWorld(){
-			return World.this;}}}
+				String fromBiome = fromBlock.getBiome().name();
+				toBlock.setBiome(Biome.valueOf(fromBiome));
+				for(int Y = 0; Y < toMV.getMaxHeight() ; Y++){
+					fromBlock = fromMV.getBlockAt(new Location(fromMV, X, Y, Z));
+                    int fromType = fromBlock.getTypeId();
+                    byte fromData = fromBlock.getData();
+					
+                    toBlock = toMV.getBlockAt(new Location(toMV, X + toXZ.X - fromXZ.X, Y, Z + toXZ.Z - fromXZ.Z));
+                    toBlock.setTypeIdAndData(fromType, fromData, false);
+                    toBlock.setData(fromData);}}}}
+	private final void deleteRegion(Region region, org.bukkit.World MV){
+		for(float X=region.minXZ.X;X<=region.maxXZ.X;X++){
+			for (float Z=region.minXZ.Z;Z<=region.maxXZ.Z;Z++){
+				for(int Y = 0; Y < MV.getMaxHeight() ; Y++){
+					MV.getBlockAt(new Location(MV, X, Y, Z))
+						.setType(Material.AIR, false);}}}}
+	private final void trimWorld(String worldId){
+		int trimFrequency = 5000;
+		int trimPadding = CoordXZ.chunkToBlock(13);
+		int ticks = 1, repeats = 1;
+		if (trimFrequency > 20)
+			repeats = trimFrequency / 20;
+		else
+			ticks = 20 / trimFrequency;
+
+		WorldTrimTask trimTask = new WorldTrimTask(Bukkit.getServer(), null, worldId, trimPadding, repeats);
+		if (trimTask.valid()){
+			int task = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(WorldBorder.plugin, Config.trimTask, ticks, ticks);
+			trimTask.setTaskID(task);}
+		else
+			throw new RuntimeException();}}
