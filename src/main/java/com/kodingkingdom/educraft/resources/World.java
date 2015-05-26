@@ -14,6 +14,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 
 import com.kodingkingdom.educraft.Student;
+import com.kodingkingdom.educraft.resources.power.LocationTeleportPower;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.wimbli.WorldBorder.Config;
 import com.wimbli.WorldBorder.CoordXZ;
@@ -39,9 +40,15 @@ public class World {
 	public class WorldItem{
 		String worldId;
 		Student worldStudent;
+		LocationTeleportPower worldTeleporter=null;
 		
 		private WorldItem(){}
 				
+		public LocationTeleportPower getTeleporter(){
+			if (worldTeleporter==null){ 
+				org.bukkit.World MV = Bukkit.getServer().createWorld(new WorldCreator(worldId));
+				worldTeleporter = new LocationTeleportPower(MV.getSpawnLocation());}
+			return worldTeleporter;}
 		public Student getStudent(){
 			return worldStudent;}
 		public World getWorld(){

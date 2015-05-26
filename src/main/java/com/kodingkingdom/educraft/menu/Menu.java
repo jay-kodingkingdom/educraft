@@ -60,7 +60,8 @@ public class Menu extends Page implements Listener{
 	@EventHandler
 	public void openMenu(PlayerInteractEvent e){
 		if (e.getItem()!=null && e.getItem().equals(menuIcon)){
-			e.getPlayer().openInventory(menuMenu);}}
+			e.getPlayer().openInventory(menuMenu);
+			openPage();}}
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void clickMenu(InventoryClickEvent e){
 		if (e.getInventory().equals(menuMenu)){

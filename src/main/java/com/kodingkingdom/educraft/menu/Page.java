@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import com.kodingkingdom.educraft.menu.Menu.MenuItem;
+
 public class Page {
 	Page parentPage;
 	HashSet<Page> childPages;
@@ -15,23 +17,31 @@ public class Page {
 		childPages = new HashSet<Page>();
 		itemPageMap = new HashMap<Menu.MenuItem,Page>();}
 	
-	public void attach(Page childPage, Collection<Menu.MenuItem> childItems){
+	public final void attach(Page childPage, Connector connector){
+		if (!connector.getPage().equals(childPage)) throw new IllegalArgumentException();
 		childPage.parentPage=this;
 		childPages.add(childPage);
-		for (Menu.MenuItem childItem : childItems){
+		for (Menu.MenuItem childItem : connector.connectingItems){
 			childPage.itemPageMap.put(childItem, childPage);
-			itemPageMap.replace(childItem, childPage);}}
+			itemPageMap.replace(childItem, childPage);}
+		childPage.attachedAction(connector);}
 
-	public void remove(Page childPage){
+	public final void remove(Page childPage){
 		childPage.parentPage=null;
 		childPages.remove(childPage);
 		for (Menu.MenuItem childItem : childPage.itemPageMap.keySet()){
 			childPage.itemPageMap.remove(childItem);
-			itemPageMap.replace(childItem, this);}}
+			itemPageMap.replace(childItem, this);}
+		childPage.removedAction();}
+
+	public final void openPage(){
+		for (Page childPage : childPages){
+			childPage.openPage();}
+		openPageAction();}
 	
 	public final void closePage(){
 		for (Page childPage : childPages){
-			childPage.closePage();;}
+			childPage.closePage();}
 		closePageAction();}
 	
 	public final void clickItem(Menu.MenuItem item){
@@ -39,6 +49,29 @@ public class Page {
 		if (itemPageMap.get(item)!=this){
 			itemPageMap.get(item).clickItem(item);}}
 
+	public Connector getConnector(Page parentPage){
+		HashSet<MenuItem> emptyItems = new HashSet<MenuItem>();
+		for (MenuItem item : parentPage.itemPageMap.keySet()){
+			if (parentPage.itemPageMap.get(item).equals(parentPage))
+				emptyItems.add(item);}
+		return makePageConnector(emptyItems);}
+	
+	protected void attachedAction(Connector connector){}
+	
+	protected void removedAction(){}
+	
+	protected void openPageAction(){}
+	
 	protected void closePageAction(){}
 	
-	protected void clickItemAction(Menu.MenuItem item){}}
+	protected void clickItemAction(Menu.MenuItem item){}
+	
+	protected final Connector makePageConnector(Collection<Menu.MenuItem> connectingItems){
+		return new Connector(connectingItems);}
+	
+	public class Connector{
+		Collection<Menu.MenuItem> connectingItems;
+		private Connector(Collection<Menu.MenuItem> ConnectingItems){
+			connectingItems=ConnectingItems;}
+		public Page getPage(){
+			return Page.this;}}}
