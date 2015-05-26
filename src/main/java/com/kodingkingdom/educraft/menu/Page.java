@@ -49,7 +49,8 @@ public class Page {
 		if (itemPageMap.get(item)!=this){
 			itemPageMap.get(item).clickItem(item);}}
 
-	public Connector getConnector(Page parentPage){
+	public Connector makePageConnector(Page parentPage){
+		if (parentPage==null) throw new IllegalStateException();
 		HashSet<MenuItem> emptyItems = new HashSet<MenuItem>();
 		for (MenuItem item : parentPage.itemPageMap.keySet()){
 			if (parentPage.itemPageMap.get(item).equals(parentPage))
@@ -69,9 +70,14 @@ public class Page {
 	protected final Connector makePageConnector(Collection<Menu.MenuItem> connectingItems){
 		return new Connector(connectingItems);}
 	
-	public class Connector{
+	public class ConnectorData{}
+	public final class Connector{
+		ConnectorData connectorData;
 		Collection<Menu.MenuItem> connectingItems;
 		private Connector(Collection<Menu.MenuItem> ConnectingItems){
 			connectingItems=ConnectingItems;}
+		public Connector with(ConnectorData ConnectorData){
+			connectorData=ConnectorData;
+			return this;}
 		public Page getPage(){
 			return Page.this;}}}

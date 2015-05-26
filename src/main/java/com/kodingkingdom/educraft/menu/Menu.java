@@ -1,8 +1,6 @@
 package com.kodingkingdom.educraft.menu;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -16,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.kodingkingdom.educraft.EduCraftPlugin;
 
-public class Menu extends Page implements Listener{
+public class Menu extends BoxPage implements Listener{
 	
 	String menuName;
 	int menuWidth,menuHeight;
@@ -29,15 +27,6 @@ public class Menu extends Page implements Listener{
 	private int getSlotNumber(int widthX, int heightY){
 		return (widthX - 1) +
 				(heightY - 1) * menuWidth;}
-
-	public MenuItem getItem(int widthX, int heightY){
-		return itemMap.get(getSlotNumber(widthX, heightY));}
-	public Collection<MenuItem> getItems(int widthX1, int heightY1, int widthX2, int heightY2){
-		HashSet<MenuItem> items = new HashSet<MenuItem>(); 
-		for (int widthX=(widthX1<widthX2?widthX1:widthX2);widthX<(widthX1>widthX2?widthX1:widthX2);widthX++){
-			for (int heightY=(heightY1<heightY2?heightY1:heightY2);heightY<(heightY1>heightY2?heightY1:heightY2);heightY++){
-				items.add(itemMap.get(getSlotNumber(widthX, heightY)));}}
-		return items;}
 	
 	public Menu(int MenuWidth, int MenuHeight, String MenuName, ItemStack MenuIcon){
 		menuName=MenuName;
@@ -45,15 +34,20 @@ public class Menu extends Page implements Listener{
 		menuHeight=MenuHeight;
 		menuIcon=MenuIcon;
 		menuMenu = Bukkit.createInventory(null, menuWidth * menuHeight, menuName);
+		
 		itemMap = new HashMap<Integer,MenuItem>();
 		slotMap = new HashMap<MenuItem,Integer>();
+		itemArray=new MenuItem[menuWidth][menuHeight];
+		
 		for (int widthX=0;widthX<menuWidth;widthX++){
 			for (int heightY=0;heightY<menuHeight;heightY++){
 				int slotNumber = getSlotNumber(widthX, heightY);
 				ItemStack itemIcon = menuMenu.getItem(slotNumber);
 				MenuItem item = new MenuItem(itemIcon);
 				itemMap.put(slotNumber, item);
-				slotMap.put(item, slotNumber);}}
+				slotMap.put(item, slotNumber);
+				
+				itemArray[widthX][heightY]=item;}}
 		
 		EduCraftPlugin.getPlugin().getEduCraft().registerEvents(this);}
 	
