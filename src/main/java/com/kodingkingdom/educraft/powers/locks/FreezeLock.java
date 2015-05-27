@@ -1,4 +1,4 @@
-package com.kodingkingdom.educraft.resources.lock;
+package com.kodingkingdom.educraft.powers.locks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -7,8 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.kodingkingdom.educraft.EduCraftPlugin;
-import com.kodingkingdom.educraft.Student;
-import com.kodingkingdom.educraft.resources.Lock;
+import com.kodingkingdom.educraft.group.Student;
+import com.kodingkingdom.educraft.powers.Lock;
 
 public class FreezeLock extends Lock implements Listener{
 	public FreezeLock(){

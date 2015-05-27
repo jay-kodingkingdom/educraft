@@ -1,6 +1,7 @@
 package com.kodingkingdom.educraft.menu;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -28,28 +29,46 @@ public class Menu extends BoxPage implements Listener{
 		return (widthX - 1) +
 				(heightY - 1) * menuWidth;}
 	
-	public Menu(int MenuWidth, int MenuHeight, String MenuName, ItemStack MenuIcon){
-		menuName=MenuName;
-		menuWidth=MenuWidth;
-		menuHeight=MenuHeight;
-		menuIcon=MenuIcon;
-		menuMenu = Bukkit.createInventory(null, menuWidth * menuHeight, menuName);
+	private Menu(){}
+	
+	static HashSet<Menu> menus=new HashSet<Menu>();
+	
+	public static Menu createMenu(int MenuWidth, int MenuHeight, String MenuName, ItemStack MenuIcon){
+		Menu menu = new Menu();
 		
-		itemMap = new HashMap<Integer,MenuItem>();
-		slotMap = new HashMap<MenuItem,Integer>();
-		itemArray=new MenuItem[menuWidth][menuHeight];
+		menu.menuName=MenuName;
+		menu.menuWidth=MenuWidth;
+		menu.menuHeight=MenuHeight;
+		menu.menuIcon=MenuIcon;
+		menu.menuMenu = Bukkit.createInventory(null, MenuWidth * MenuHeight, MenuName);
 		
-		for (int widthX=0;widthX<menuWidth;widthX++){
-			for (int heightY=0;heightY<menuHeight;heightY++){
-				int slotNumber = getSlotNumber(widthX, heightY);
-				ItemStack itemIcon = menuMenu.getItem(slotNumber);
-				MenuItem item = new MenuItem(itemIcon);
-				itemMap.put(slotNumber, item);
-				slotMap.put(item, slotNumber);
+		menu.itemMap = new HashMap<Integer,MenuItem>();
+		menu.slotMap = new HashMap<MenuItem,Integer>();
+		menu.menuItemsBox = new Box<MenuItem>(new MenuItem[MenuWidth][MenuHeight]);
+		
+		for (int widthX=0;widthX<MenuWidth;widthX++){
+			for (int heightY=0;heightY<MenuHeight;heightY++){
+				int slotNumber = menu.getSlotNumber(widthX, heightY);
+				ItemStack itemIcon = menu.menuMenu.getItem(slotNumber);
+				MenuItem item = menu.new MenuItem(itemIcon);
+				menu.itemMap.put(slotNumber, item);
+				menu.slotMap.put(item, slotNumber);
 				
-				itemArray[widthX][heightY]=item;}}
+				menu.menuItemsBox.setBoxItem(widthX,heightY,item);}}
 		
-		EduCraftPlugin.getPlugin().getEduCraft().registerEvents(this);}
+		EduCraftPlugin.getPlugin().getEduCraft().registerEvents(menu);
+		
+		menus.add(menu);
+		return menu;}
+	
+	public static void deleteMenu(Menu menu){
+		menu.menuName=null;
+		menu.menuWidth=menu.menuHeight=-1;
+		menu.menuIcon=null;
+		menu.menuMenu=null;	
+		menu.itemMap=null;
+		menu.slotMap=null;
+		menus.remove(menu);}
 	
 	@EventHandler
 	public void openMenu(PlayerInteractEvent e){

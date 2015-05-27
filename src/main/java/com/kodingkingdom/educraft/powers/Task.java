@@ -1,8 +1,8 @@
-package com.kodingkingdom.educraft.resources;
+package com.kodingkingdom.educraft.powers;
 
 import java.util.HashMap;
 
-import com.kodingkingdom.educraft.Student;
+import com.kodingkingdom.educraft.group.Student;
 
 public class Task {
 

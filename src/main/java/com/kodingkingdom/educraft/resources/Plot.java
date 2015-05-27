@@ -5,15 +5,18 @@ import java.util.HashSet;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 
 import com.kodingkingdom.craftercoordinator.CrafterRegion;
-import com.kodingkingdom.educraft.Student;
+import com.kodingkingdom.educraft.group.Student;
+import com.kodingkingdom.educraft.powers.powers.LocationTeleportPower;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.worldcretornica.plotme.PlotManager;
+import com.worldcretornica.plotme.PlotMapInfo;
 import com.worldcretornica.plotme.SqlManager;
 
 public class Plot {
@@ -115,6 +118,7 @@ getPlot:
 	public class PlotItem{
 		String plotId;
 		Student plotStudent;
+		LocationTeleportPower plotTeleporter=null;
 		
 		private PlotItem(){}
 
@@ -129,7 +133,14 @@ getPlot:
 			String denied = student.getName();
 			plot.addDenied(denied);
 			plot.removeAllowed(denied);}		
-		
+
+		public LocationTeleportPower getTeleporter(){
+			if (plotTeleporter==null){ 
+				org.bukkit.World MV = Bukkit.getServer().createWorld(new WorldCreator(Plot.this.name));
+				PlotMapInfo pmi = PlotManager.getMap(MV);
+				com.worldcretornica.plotme.Plot plot = PlotManager.getPlotById(Plot.this.name, plotId);
+				plotTeleporter = new LocationTeleportPower(new Location(MV, PlotManager.bottomX(plot.id, MV) + (PlotManager.topX(plot.id, MV) - PlotManager.bottomX(plot.id, MV))/2, pmi.RoadHeight + 2, PlotManager.bottomZ(plot.id, MV) - 2));}
+			return plotTeleporter;}
 		public Student getStudent(){
 			return plotStudent;}
 		public Plot getPlot(){

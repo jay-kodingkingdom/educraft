@@ -13,8 +13,8 @@ import org.bukkit.WorldType;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 
-import com.kodingkingdom.educraft.Student;
-import com.kodingkingdom.educraft.resources.power.LocationTeleportPower;
+import com.kodingkingdom.educraft.group.Student;
+import com.kodingkingdom.educraft.powers.powers.LocationTeleportPower;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.wimbli.WorldBorder.Config;
 import com.wimbli.WorldBorder.CoordXZ;

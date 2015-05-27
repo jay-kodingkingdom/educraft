@@ -1,4 +1,4 @@
-package com.kodingkingdom.educraft;
+package com.kodingkingdom.educraft.group;
 
 import java.util.UUID;
 

@@ -1,4 +1,4 @@
-package com.kodingkingdom.educraft.resources.lock;
+package com.kodingkingdom.educraft.powers.locks;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -12,8 +12,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.kodingkingdom.educraft.EduCraftPlugin;
-import com.kodingkingdom.educraft.Student;
-import com.kodingkingdom.educraft.resources.Lock;
+import com.kodingkingdom.educraft.group.Student;
+import com.kodingkingdom.educraft.powers.Lock;
 
 public class ForceBuildLock extends Lock implements Listener{
 	HashSet<Material> forceBuildMaterials;

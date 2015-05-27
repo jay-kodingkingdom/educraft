@@ -1,6 +1,7 @@
 name: EduCraft
 main: com.kodingkingdom.educraft.EduCraftPlugin
 version: 0.0.1
+softdepend: [WorldEdit, PlotMe, Multiverse-Core, WorldBorder]
 commands:
    edu:
    educraft:

@@ -1,22 +1,21 @@
-package com.kodingkingdom.educraft.resources.power;
+package com.kodingkingdom.educraft.powers.powers;
 
 import java.util.HashMap;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
-import com.kodingkingdom.educraft.resources.Power;
+import com.kodingkingdom.educraft.powers.Power;
 
-public class PlayerTeleportPower extends Power implements Listener{
-	Player player;
+public class LocationTeleportPower extends Power implements Listener{
+	Location location;
 	
 	HashMap<PowerItem, Location> originalLocationMap = new HashMap<PowerItem, Location>(); 
-	public PlayerTeleportPower(Player Player){
-		player=Player;}
+	public LocationTeleportPower(Location loc){
+		location=loc;}
 	protected final void doAction(PowerItem powerItem){
 		originalLocationMap.put(powerItem, powerItem.getStudent().getPlayer().getLocation());
-		powerItem.getStudent().getPlayer().teleport(player.getLocation());}
+		powerItem.getStudent().getPlayer().teleport(location);}
 	protected final void undoAction(PowerItem powerItem){
 		powerItem.getStudent().getPlayer().teleport(originalLocationMap.get(powerItem));
 		originalLocationMap.remove(powerItem);}}
