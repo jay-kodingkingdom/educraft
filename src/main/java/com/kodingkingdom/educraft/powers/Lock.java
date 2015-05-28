@@ -2,20 +2,22 @@ package com.kodingkingdom.educraft.powers;
 
 import java.util.HashMap;
 
-import com.kodingkingdom.educraft.group.Student;
+import com.kodingkingdom.educraft.group.users.Student;
 
 public class Lock {
 
 	protected HashMap<Student,LockItem> studentLockMap;
 
-	public final void give(Student lockStudent){
-		LockItem lockItem = new LockItem(lockStudent);
-		studentLockMap.put(lockStudent, lockItem);
-		lockAction(lockItem);}
-	public final void take(Student lockStudent){
-		LockItem lockItem = studentLockMap.get(lockStudent);
-		studentLockMap.remove(lockStudent);
-		unlockAction(lockItem);}
+	public final void give(Student... lockStudents){
+		for (Student lockStudent : lockStudents){
+			LockItem lockItem = new LockItem(lockStudent);
+			studentLockMap.put(lockStudent, lockItem);
+			lockAction(lockItem);}}
+	public final void take(Student... lockStudents){
+		for (Student lockStudent : lockStudents){
+			LockItem lockItem = studentLockMap.get(lockStudent);
+			studentLockMap.remove(lockStudent);
+			unlockAction(lockItem);}}
 	
 	protected void lockAction(LockItem lockItem){}
 	protected void unlockAction(LockItem lockItem){}

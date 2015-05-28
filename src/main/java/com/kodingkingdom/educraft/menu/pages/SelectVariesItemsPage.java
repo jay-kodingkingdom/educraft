@@ -8,7 +8,7 @@ import com.kodingkingdom.educraft.menu.Box;
 import com.kodingkingdom.educraft.menu.BoxPage;
 import com.kodingkingdom.educraft.menu.Menu;
 
-public class ScrollingSelectPage extends BoxPage{
+public class SelectVariesItemsPage extends BoxPage{
 
 	private long pollInterval;
 	private int pageNumber;
@@ -18,7 +18,7 @@ public class ScrollingSelectPage extends BoxPage{
 	
 	private int pollId =-1;
 	
-	public ScrollingSelectPage(Supplier<List<SelectItem>> SelectItemsGetter, long PollInterval){
+	public SelectVariesItemsPage(Supplier<List<SelectItem>> SelectItemsGetter, long PollInterval){
 		pollInterval=PollInterval;
 		pageNumber=0;
 		selectItemsGetter=SelectItemsGetter;}
@@ -63,6 +63,11 @@ public class ScrollingSelectPage extends BoxPage{
 			for (int heightY=0;heightY<menuItemsBox.getWidth();heightY++){
 				if (menuItemsBox.getBoxItem(widthX, heightY).equals(item)){
 					selectItemsBox.getBoxItem(widthX, heightY).action.run();}}}}
+
+	public void nextPage(){
+		pageNumber++;}
+	public void prevPage(){
+		pageNumber--;}
 	
 	public Connector makePageConnector(BoxPage parentPage, int widthX1, int heightY1, int widthX2, int heightY2){
 		if (widthX2-widthX1+1 != selectItemsBox.getWidth() ||

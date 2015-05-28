@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.kodingkingdom.educraft.EduCraftPlugin;
-import com.kodingkingdom.educraft.group.Student;
+import com.kodingkingdom.educraft.group.users.Student;
 import com.kodingkingdom.educraft.powers.Lock;
 
 public class FreezeLock extends Lock implements Listener{

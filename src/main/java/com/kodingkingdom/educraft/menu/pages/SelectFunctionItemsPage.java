@@ -4,18 +4,20 @@ import com.kodingkingdom.educraft.menu.Box;
 import com.kodingkingdom.educraft.menu.BoxPage;
 import com.kodingkingdom.educraft.menu.Menu;
 
-public class BoxSelectPage extends BoxPage{
+public class SelectFunctionItemsPage<T> extends BoxPage{
 
-	private Box<SelectItem> selectItemsBox;
+	private Box<T> selectItemsBox;
+	private SelectFunctionItem<T> function;
 	
-	public BoxSelectPage(SelectItem[][] SelectItems){
-		selectItemsBox=new Box<SelectItem>(SelectItems);}
+	public SelectFunctionItemsPage(T[][] SelectItems, SelectFunctionItem<T> Function){ 
+		selectItemsBox=new Box<T>(SelectItems);
+		function=Function;}
 	
 	protected void attachedAction(Connector connector){
 		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
 			for (int heightY=0;heightY<menuItemsBox.getWidth();heightY++){
 				menuItemsBox.getBoxItem(widthX, heightY).setIcon(
-						selectItemsBox.getBoxItem(widthX, heightY).icon);}}}
+						function.iconFunction.apply(selectItemsBox.getBoxItem(widthX, heightY)));}}}
 	
 	protected void removedAction(){
 		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
@@ -27,7 +29,7 @@ public class BoxSelectPage extends BoxPage{
 		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
 			for (int heightY=0;heightY<menuItemsBox.getWidth();heightY++){
 				if (menuItemsBox.getBoxItem(widthX, heightY).equals(item)){
-					selectItemsBox.getBoxItem(widthX, heightY).action.run();}}}}
+					function.actionFunction.apply(selectItemsBox.getBoxItem(widthX, heightY));}}}}
 	
 	public Connector makePageConnector(BoxPage parentPage, int widthX1, int heightY1, int widthX2, int heightY2){
 		if (widthX2-widthX1+1 != selectItemsBox.getWidth() ||

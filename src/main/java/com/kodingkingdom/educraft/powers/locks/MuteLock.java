@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import com.kodingkingdom.educraft.EduCraftPlugin;
-import com.kodingkingdom.educraft.group.Student;
+import com.kodingkingdom.educraft.group.users.Student;
 import com.kodingkingdom.educraft.powers.Lock;
 
 public class MuteLock extends Lock implements Listener{

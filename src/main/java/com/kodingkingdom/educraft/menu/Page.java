@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import com.kodingkingdom.educraft.EduCraftPlugin;
 import com.kodingkingdom.educraft.menu.Menu.MenuItem;
 
 public class Page {
@@ -45,8 +46,10 @@ public class Page {
 		closePageAction();}
 	
 	public final void clickItem(Menu.MenuItem item){
+		EduCraftPlugin.debug("recieved click in page "+this);
 		clickItemAction(item);
 		if (itemPageMap.get(item)!=this){
+			EduCraftPlugin.debug("propagating click to child "+itemPageMap.get(item));
 			itemPageMap.get(item).clickItem(item);}}
 
 	public Connector makePageConnector(Page parentPage){

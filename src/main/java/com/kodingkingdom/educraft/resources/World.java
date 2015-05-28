@@ -13,7 +13,7 @@ import org.bukkit.WorldType;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 
-import com.kodingkingdom.educraft.group.Student;
+import com.kodingkingdom.educraft.group.users.Student;
 import com.kodingkingdom.educraft.powers.powers.LocationTeleportPower;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.wimbli.WorldBorder.Config;
@@ -169,15 +169,7 @@ public class World {
 	
 	
 	
-	
-	public final WorldItem[] giveWorld(Student... worldStudents){
-		try {
-			WorldItem[] worldItems=prepareWorld(worldStudents);
-			
-			for (WorldItem worldItem : worldItems) studentWorldsMap.get(worldItem.worldStudent).add(worldItem);
-			return worldItems;}
-		catch (Exception e){
-			throw new RuntimeException("Could not create worlds");}}
+
 	public final WorldItem giveWorld(Student worldStudent){
 		try {
 			WorldItem worldItem=prepareWorld(worldStudent)[0];
@@ -186,10 +178,19 @@ public class World {
 			return worldItem;}
 		catch (Exception e){
 			throw new RuntimeException("Could not create world");}}
-	public final void takeWorld(WorldItem worldItem){
-		com.wimbli.WorldBorder.Config.removeBorder(worldItem.worldId);
-		multiverseCore.getMVWorldManager().deleteWorld(worldItem.worldId, true, true);
-		studentWorldsMap.get(worldItem.getStudent()).remove(worldItem);}	
+	public final WorldItem[] giveWorld(Student... worldStudents){
+		try {
+			WorldItem[] worldItems=prepareWorld(worldStudents);
+			
+			for (WorldItem worldItem : worldItems) studentWorldsMap.get(worldItem.worldStudent).add(worldItem);
+			return worldItems;}
+		catch (Exception e){
+			throw new RuntimeException("Could not create worlds");}}
+	public final void takeWorld(WorldItem... worldItems){
+		for (WorldItem worldItem : worldItems){
+			com.wimbli.WorldBorder.Config.removeBorder(worldItem.worldId);
+			multiverseCore.getMVWorldManager().deleteWorld(worldItem.worldId, true, true);
+			studentWorldsMap.get(worldItem.getStudent()).remove(worldItem);}}	
 	
 	
 	

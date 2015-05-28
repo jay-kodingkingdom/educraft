@@ -2,7 +2,6 @@ package com.kodingkingdom.educraft.group;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -15,13 +14,10 @@ import org.bukkit.entity.Player;
 import com.kodingkingdom.educraft.EduCraftPlugin;
 import com.worldcretornica.plotme.utils.NameFetcher;
 
-public class Student {
-	
+public class User {
 	UUID id;
 	String name=null;
-	
-	static HashMap<UUID, Student> idStudentMap=new HashMap<UUID, Student>(); 
-	
+		
 	public UUID getId(){
 		return id;}
 	public String getName(){
@@ -31,20 +27,13 @@ public class Student {
 	public Player getPlayer(){
 		return Bukkit.getPlayer(id);}
 	
-	private Student(UUID Id){
+	protected User(UUID Id){
 		id=Id;
-		EduCraftPlugin.getPlugin().getEduCraft().scheduleAsyncTask(() -> {getPlayerName();});}
-	
-	
-	public static Student getStudent(UUID id){
-		if (idStudentMap.containsKey(id))
-			idStudentMap.put(id, new Student(id));
-		return idStudentMap.get(id);}
-	
+		EduCraftPlugin.getPlugin().getEduCraft().scheduleAsyncTask(() -> {getPlayerName();});}	
 	
 	private static final long bufferTime = 2*1000L;
 	private static ReentrantLock lock = new ReentrantLock(); 
-	private void getPlayerName(){			
+	protected void getPlayerName(){			
 		lock.lock();
 		try{
 	        OfflinePlayer player = Bukkit.getOfflinePlayer(id);

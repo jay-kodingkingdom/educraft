@@ -14,8 +14,8 @@ public class LocationTeleportPower extends Power implements Listener{
 	public LocationTeleportPower(Location loc){
 		location=loc;}
 	protected final void doAction(PowerItem powerItem){
-		originalLocationMap.put(powerItem, powerItem.getStudent().getPlayer().getLocation());
-		powerItem.getStudent().getPlayer().teleport(location);}
+		originalLocationMap.put(powerItem, powerItem.getUser().getPlayer().getLocation());
+		powerItem.getUser().getPlayer().teleport(location);}
 	protected final void undoAction(PowerItem powerItem){
-		powerItem.getStudent().getPlayer().teleport(originalLocationMap.get(powerItem));
+		powerItem.getUser().getPlayer().teleport(originalLocationMap.get(powerItem));
 		originalLocationMap.remove(powerItem);}}

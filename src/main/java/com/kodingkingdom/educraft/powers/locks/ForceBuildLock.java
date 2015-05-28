@@ -12,7 +12,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.kodingkingdom.educraft.EduCraftPlugin;
-import com.kodingkingdom.educraft.group.Student;
+import com.kodingkingdom.educraft.group.users.Student;
 import com.kodingkingdom.educraft.powers.Lock;
 
 public class ForceBuildLock extends Lock implements Listener{

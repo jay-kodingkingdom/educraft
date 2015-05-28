@@ -8,19 +8,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemStack;
-
-import com.kodingkingdom.educraft.menu.Menu;
 
 public class EduCraft implements Listener, CommandExecutor{
 
 	EduCraftPlugin plugin;	
 	public EduCraft(EduCraftPlugin Plugin){plugin=Plugin;}
 	
-	ItemStack menuIcon;
-	Menu teacherMenu;
+	TeacherMenu teacherMenu;
 	
 	public void Live(){
+		teacherMenu=new TeacherMenu();
 		plugin.getCommand("edu").setExecutor(this);
 		plugin.getCommand("educraft").setExecutor(this);
 		registerEvents(this);}
@@ -38,17 +35,17 @@ public class EduCraft implements Listener, CommandExecutor{
 		plugin.getServer().getScheduler().cancelTask(taskId);}
 
 	@EventHandler
-	public void giveMenu(PlayerJoinEvent e){
+	public void giveTeacherMenu(PlayerJoinEvent e){
 		if (e.getPlayer().isOp()) {
-			giveMenu(e.getPlayer());}}
+			giveTeacherMenu(e.getPlayer());}}
 	
-	private void giveMenu(Player player){
+	private void giveTeacherMenu(Player player){
 		int slotNumber=0;
 		for (;slotNumber<player.getInventory().getSize();slotNumber++){
 			if (player.getInventory().getItem(slotNumber)==null) break;}
 		if (slotNumber<player.getInventory().getSize())
-			player.getInventory().setItem(slotNumber,menuIcon);
-		else player.setItemInHand(menuIcon);}
+			player.getInventory().setItem(slotNumber,teacherMenu.menuIcon);
+		else player.setItemInHand(teacherMenu.menuIcon);}
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
@@ -60,7 +57,7 @@ public class EduCraft implements Listener, CommandExecutor{
 		if (args.length==1){
 			if (args[0].equalsIgnoreCase("giveMenu")){ 
 				if (sender instanceof Player){
-					giveMenu((Player)sender);
+					giveTeacherMenu((Player)sender);
 					sender.sendMessage("Teacher menu given");
 					return true;}
 				else {
@@ -70,7 +67,7 @@ public class EduCraft implements Listener, CommandExecutor{
 			if (args[0].equalsIgnoreCase("giveMenu")){
 				Player player = Bukkit.getPlayer(args[1]);
 				if (player != null){
-					giveMenu((Player)sender);
+					giveTeacherMenu((Player)sender);
 					sender.sendMessage("Teacher menu given");
 					return true;}
 				else {

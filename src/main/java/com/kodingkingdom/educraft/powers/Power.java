@@ -2,31 +2,33 @@ package com.kodingkingdom.educraft.powers;
 
 import java.util.HashMap;
 
-import com.kodingkingdom.educraft.group.Student;
+import com.kodingkingdom.educraft.group.User;
 
 public class Power {
 
-	protected HashMap<Student,PowerItem> studentPowerMap;
+	protected HashMap<User,PowerItem> userPowerMap;
 
-	public final void give(Student powerStudent){
-		PowerItem powerItem = new PowerItem(powerStudent);
-		studentPowerMap.put(powerStudent, powerItem);
-		doAction(powerItem);}
-	public final void take(Student powerStudent){
-		PowerItem powerItem = new PowerItem(powerStudent);
-		studentPowerMap.remove(powerStudent);
-		undoAction(powerItem);}
+	public final void give(User... powerUsers){
+		for (User powerUser : powerUsers){
+			PowerItem powerItem = new PowerItem(powerUser);
+			userPowerMap.put(powerUser, powerItem);
+			doAction(powerItem);}}
+	public final void take(User... powerUsers){
+		for (User powerUser : powerUsers){
+			PowerItem powerItem = new PowerItem(powerUser);
+			userPowerMap.remove(powerUser);
+			undoAction(powerItem);}}
 	
 	protected void doAction(PowerItem lockItem){}
 	protected void undoAction(PowerItem lockItem){}
 	
 	public class PowerItem{
-		Student powerStudent;
+		User user;
 		
-		PowerItem(Student PowerStudent){
-			powerStudent=PowerStudent;}
+		PowerItem(User User){
+			user=User;}
 		
-		public Student getStudent(){
-			return powerStudent;}
-		public Power getpower(){
+		public User getUser(){
+			return user;}
+		public Power getPower(){
 			return Power.this;}}}

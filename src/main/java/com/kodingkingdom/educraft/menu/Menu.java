@@ -26,8 +26,8 @@ public class Menu extends BoxPage implements Listener{
 	HashMap<MenuItem,Integer> slotMap;
 	
 	private int getSlotNumber(int widthX, int heightY){
-		return (widthX - 1) +
-				(heightY - 1) * menuWidth;}
+		return (widthX) +
+				(heightY) * menuWidth;}
 	
 	private Menu(){}
 	
@@ -41,6 +41,7 @@ public class Menu extends BoxPage implements Listener{
 		menu.menuHeight=MenuHeight;
 		menu.menuIcon=MenuIcon;
 		menu.menuMenu = Bukkit.createInventory(null, MenuWidth * MenuHeight, MenuName);
+		EduCraftPlugin.debug("size of inv is "+menu.menuMenu.getSize());
 		
 		menu.itemMap = new HashMap<Integer,MenuItem>();
 		menu.slotMap = new HashMap<MenuItem,Integer>();
@@ -49,12 +50,15 @@ public class Menu extends BoxPage implements Listener{
 		for (int widthX=0;widthX<MenuWidth;widthX++){
 			for (int heightY=0;heightY<MenuHeight;heightY++){
 				int slotNumber = menu.getSlotNumber(widthX, heightY);
+				EduCraftPlugin.debug("slot Number is "+slotNumber);
 				ItemStack itemIcon = menu.menuMenu.getItem(slotNumber);
 				MenuItem item = menu.new MenuItem(itemIcon);
 				menu.itemMap.put(slotNumber, item);
 				menu.slotMap.put(item, slotNumber);
 				
-				menu.menuItemsBox.setBoxItem(widthX,heightY,item);}}
+				menu.menuItemsBox.setBoxItem(widthX,heightY,item);
+
+				menu.itemPageMap.put(item, menu);}}
 		
 		EduCraftPlugin.getPlugin().getEduCraft().registerEvents(menu);
 		
@@ -77,7 +81,7 @@ public class Menu extends BoxPage implements Listener{
 			openPage();}}
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void clickMenu(InventoryClickEvent e){
-		if (e.getInventory().equals(menuMenu)){
+		if (menuMenu.equals(e.getClickedInventory())){
 			e.setCancelled(true);
 			if (e.getCursor()==null)return;
 			clickItem(itemMap.get(e.getRawSlot()));}}

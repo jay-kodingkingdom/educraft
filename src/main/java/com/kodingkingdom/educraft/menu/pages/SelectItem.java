@@ -7,4 +7,6 @@ public class SelectItem{
 	ItemStack icon;
 	public SelectItem(Runnable Action,ItemStack Icon){
 		action=Action;
-		icon=Icon.clone();}}
+		icon=Icon.clone();}
+	
+	public static final SelectItem Null=new SelectItem(()->{},null);}

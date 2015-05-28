@@ -12,7 +12,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 
 import com.kodingkingdom.craftercoordinator.CrafterRegion;
-import com.kodingkingdom.educraft.group.Student;
+import com.kodingkingdom.educraft.group.users.Student;
 import com.kodingkingdom.educraft.powers.powers.LocationTeleportPower;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.worldcretornica.plotme.PlotManager;
@@ -95,24 +95,25 @@ getPlot:
 							break getPlot;}}}}}
 		
 		return plotItems;}
-	public final void takePlot(PlotItem plotItem){
+	public final void takePlot(PlotItem... plotItems){
 		org.bukkit.World plotMV = Bukkit.getServer().createWorld(new WorldCreator(name));
 
-		com.worldcretornica.plotme.Plot plot = PlotManager.getPlotById(name,plotItem.plotId);
-		
-		String id = plot.id;
+		for (PlotItem plotItem : plotItems){
+			com.worldcretornica.plotme.Plot plot = PlotManager.getPlotById(name,plotItem.plotId);
+			
+			String id = plot.id;
 
-		PlotManager.setBiome(plotMV, id, plot, Biome.PLAINS);
-		PlotManager.clear(plotMV, plot);
+			PlotManager.setBiome(plotMV, id, plot, Biome.PLAINS);
+			PlotManager.clear(plotMV, plot);
 
-		PlotManager.getPlots(plotItem.getStudent().getName()).remove(id);
+			PlotManager.getPlots(plotItem.getStudent().getName()).remove(id);
 
-		PlotManager.removeOwnerSign(plotMV, id);
-		PlotManager.removeSellSign(plotMV, id);
+			PlotManager.removeOwnerSign(plotMV, id);
+			PlotManager.removeSellSign(plotMV, id);
 
-		SqlManager.deletePlot(PlotManager.getIdX(id), PlotManager.getIdZ(id), plotMV.getName().toLowerCase());
+			SqlManager.deletePlot(PlotManager.getIdX(id), PlotManager.getIdZ(id), plotMV.getName().toLowerCase());
 
-		studentPlotsMap.get(plotItem.getStudent()).remove(plotItem);}	
+			studentPlotsMap.get(plotItem.getStudent()).remove(plotItem);}}	
 	
 	
 	public class PlotItem{
