@@ -1,6 +1,6 @@
-package com.kodingkingdom.educraft.menu;
+package com.kodingkingdom.educraft.page;
 
-import com.kodingkingdom.educraft.menu.Menu.MenuItem;
+import com.kodingkingdom.educraft.page.Menu.MenuItem;
 
 public class BoxPage extends Page{
 	
@@ -16,7 +16,7 @@ public class BoxPage extends Page{
 		return items;}
 
 	protected void attachedAction(Connector connector){
-		if (!(connector.connectorData instanceof BoxConnectorData)) throw new RuntimeException();
+		if (connector!=null && !(connector.connectorData instanceof BoxConnectorData)) throw new RuntimeException();
 		BoxConnectorData boxConnectorData = (BoxConnectorData)connector.connectorData;
 		menuItemsBox = boxConnectorData.menuItemsBox;}
 	

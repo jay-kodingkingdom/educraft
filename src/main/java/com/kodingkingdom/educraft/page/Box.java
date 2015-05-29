@@ -1,4 +1,4 @@
-package com.kodingkingdom.educraft.menu;
+package com.kodingkingdom.educraft.page;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -25,6 +25,9 @@ public class Box<T> {
 	public T getBoxItem(int widthX, int heightY){
 		return boxArray[widthX][heightY];}
 	
+	public int getSlotNumber(int widthX, int heightY){
+		return (widthX) +
+				(heightY) * width;}
 	
 	void setBoxItem(int widthX, int heightY, T item){
 		boxArray[widthX][heightY]=item;}

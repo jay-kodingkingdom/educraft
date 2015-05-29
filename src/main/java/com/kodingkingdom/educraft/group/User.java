@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import com.kodingkingdom.educraft.EduCraftPlugin;
 import com.worldcretornica.plotme.utils.NameFetcher;
 
-public class User {
+public class User implements Comparable<User>{
 	UUID id;
 	String name=null;
 		
@@ -67,4 +67,6 @@ public class User {
 	            catch (Exception e) {
 	            	//CrafterMakerPlugin.say("Exception while running NameFetcher");
 	                e.printStackTrace();}}}
-		finally{lock.unlock();}}}
+		finally{lock.unlock();}}
+	public int compareTo(User o) {
+		return this.getName().compareTo(o.getName());}}

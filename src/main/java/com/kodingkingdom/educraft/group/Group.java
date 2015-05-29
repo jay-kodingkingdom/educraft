@@ -10,7 +10,7 @@ import com.kodingkingdom.educraft.powers.Task;
 import com.kodingkingdom.educraft.resources.Plot;
 import com.kodingkingdom.educraft.resources.World;
 
-public class Group {
+public class Group implements Comparable<Group>{
 	String name;
 	
 	HashSet<Student> students;
@@ -112,4 +112,6 @@ public class Group {
 		group1.worlds.addAll(group2.worlds);
 		group1.plots.addAll(group2.plots);
 		group1.locks.addAll(group2.locks);
-		Group.delete(group2);}}
+		Group.delete(group2);}
+	public int compareTo(Group o) {
+		return this.getName().compareTo(o.getName());}}

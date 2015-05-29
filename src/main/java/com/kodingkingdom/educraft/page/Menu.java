@@ -1,4 +1,4 @@
-package com.kodingkingdom.educraft.menu;
+package com.kodingkingdom.educraft.page;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,10 +25,6 @@ public class Menu extends BoxPage implements Listener{
 	HashMap<Integer,MenuItem> itemMap;
 	HashMap<MenuItem,Integer> slotMap;
 	
-	private int getSlotNumber(int widthX, int heightY){
-		return (widthX) +
-				(heightY) * menuWidth;}
-	
 	private Menu(){}
 	
 	static HashSet<Menu> menus=new HashSet<Menu>();
@@ -49,7 +45,7 @@ public class Menu extends BoxPage implements Listener{
 		
 		for (int widthX=0;widthX<MenuWidth;widthX++){
 			for (int heightY=0;heightY<MenuHeight;heightY++){
-				int slotNumber = menu.getSlotNumber(widthX, heightY);
+				int slotNumber = menu.menuItemsBox.getSlotNumber(widthX, heightY);
 				EduCraftPlugin.debug("slot Number is "+slotNumber);
 				ItemStack itemIcon = menu.menuMenu.getItem(slotNumber);
 				MenuItem item = menu.new MenuItem(itemIcon);

@@ -1,35 +1,39 @@
-package com.kodingkingdom.educraft.menu.pages;
+package com.kodingkingdom.educraft.page.select;
 
-import com.kodingkingdom.educraft.menu.Box;
-import com.kodingkingdom.educraft.menu.BoxPage;
-import com.kodingkingdom.educraft.menu.Menu;
+import java.util.function.Function;
+
+import com.kodingkingdom.educraft.page.Box;
+import com.kodingkingdom.educraft.page.BoxPage;
+import com.kodingkingdom.educraft.page.Menu;
 
 public class SelectFunctionItemsPage<T> extends BoxPage{
 
 	private Box<T> selectItemsBox;
-	private SelectFunctionItem<T> function;
+	private Function<T,SelectItem> function;
 	
-	public SelectFunctionItemsPage(T[][] SelectItems, SelectFunctionItem<T> Function){ 
+	public SelectFunctionItemsPage(T[][] SelectItems, Function<T,SelectItem> Function){ 
 		selectItemsBox=new Box<T>(SelectItems);
 		function=Function;}
 	
 	protected void attachedAction(Connector connector){
+		super.attachedAction(connector);
 		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
 			for (int heightY=0;heightY<menuItemsBox.getWidth();heightY++){
 				menuItemsBox.getBoxItem(widthX, heightY).setIcon(
-						function.iconFunction.apply(selectItemsBox.getBoxItem(widthX, heightY)));}}}
+						SelectItem.normalize(function.apply(selectItemsBox.getBoxItem(widthX, heightY))).icon);}}}
 	
 	protected void removedAction(){
 		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
 			for (int heightY=0;heightY<menuItemsBox.getWidth();heightY++){
 				menuItemsBox.getBoxItem(widthX, heightY).setIcon(
-						null);}}}
+						null);}}
+		super.removedAction();}
 	
 	protected void clickItemAction(Menu.MenuItem item){
 		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
 			for (int heightY=0;heightY<menuItemsBox.getWidth();heightY++){
 				if (menuItemsBox.getBoxItem(widthX, heightY).equals(item)){
-					function.actionFunction.apply(selectItemsBox.getBoxItem(widthX, heightY));}}}}
+					SelectItem.normalize(function.apply(selectItemsBox.getBoxItem(widthX, heightY))).action.run();}}}}
 	
 	public Connector makePageConnector(BoxPage parentPage, int widthX1, int heightY1, int widthX2, int heightY2){
 		if (widthX2-widthX1+1 != selectItemsBox.getWidth() ||

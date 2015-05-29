@@ -9,6 +9,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import com.kodingkingdom.educraft.menu.TeacherMenu;
+
 public class EduCraft implements Listener, CommandExecutor{
 
 	EduCraftPlugin plugin;	

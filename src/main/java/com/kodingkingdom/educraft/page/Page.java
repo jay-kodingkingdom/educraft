@@ -1,17 +1,22 @@
-package com.kodingkingdom.educraft.menu;
+package com.kodingkingdom.educraft.page;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
 import com.kodingkingdom.educraft.EduCraftPlugin;
-import com.kodingkingdom.educraft.menu.Menu.MenuItem;
+import com.kodingkingdom.educraft.page.Menu.MenuItem;
 
 public class Page {
 	Page parentPage;
 	HashSet<Page> childPages;
 	
 	HashMap<Menu.MenuItem,Page> itemPageMap;
+
+	public final Page getParentPage(){
+		return parentPage;}
+	public final HashSet<Page> getChildPages(){
+		return new HashSet<Page>(childPages);}
 	
 	public Page(){
 		parentPage = null;
@@ -38,12 +43,12 @@ public class Page {
 	public final void openPage(){
 		for (Page childPage : childPages){
 			childPage.openPage();}
-		openPageAction();}
+		attachedAction(null);}
 	
 	public final void closePage(){
 		for (Page childPage : childPages){
 			childPage.closePage();}
-		closePageAction();}
+		removedAction();}
 	
 	public final void clickItem(Menu.MenuItem item){
 		EduCraftPlugin.debug("recieved click in page "+this);
@@ -63,10 +68,6 @@ public class Page {
 	protected void attachedAction(Connector connector){}
 	
 	protected void removedAction(){}
-	
-	protected void openPageAction(){}
-	
-	protected void closePageAction(){}
 	
 	protected void clickItemAction(Menu.MenuItem item){}
 	
