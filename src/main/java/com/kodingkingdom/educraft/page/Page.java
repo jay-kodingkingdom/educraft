@@ -10,21 +10,21 @@ import com.kodingkingdom.educraft.page.Menu.MenuItem;
 public class Page {
 	Page parentPage;
 	HashSet<Page> childPages;
+
+	public Page getParentPage(){
+		return parentPage;}
+	public Collection<Page> getChildPages(){
+		return new HashSet<Page>(childPages);}
 	
 	HashMap<Menu.MenuItem,Page> itemPageMap;
-
-	public final Page getParentPage(){
-		return parentPage;}
-	public final HashSet<Page> getChildPages(){
-		return new HashSet<Page>(childPages);}
 	
 	public Page(){
 		parentPage = null;
 		childPages = new HashSet<Page>();
 		itemPageMap = new HashMap<Menu.MenuItem,Page>();}
 	
-	public final void attach(Page childPage, Connector connector){
-		if (!connector.getPage().equals(childPage)) throw new IllegalArgumentException();
+	public final void attach(Connector connector){
+		Page childPage = connector.getPage();
 		childPage.parentPage=this;
 		childPages.add(childPage);
 		for (Menu.MenuItem childItem : connector.connectingItems){
@@ -32,13 +32,13 @@ public class Page {
 			itemPageMap.replace(childItem, childPage);}
 		childPage.attachedAction(connector);}
 
-	public final void remove(Page childPage){
-		childPage.parentPage=null;
-		childPages.remove(childPage);
-		for (Menu.MenuItem childItem : childPage.itemPageMap.keySet()){
-			childPage.itemPageMap.remove(childItem);
-			itemPageMap.replace(childItem, this);}
-		childPage.removedAction();}
+	public final void remove(){
+		for (Menu.MenuItem childItem : itemPageMap.keySet()){
+			parentPage.itemPageMap.replace(childItem, this);
+			itemPageMap.remove(childItem);}
+		parentPage.childPages.remove(this);
+		parentPage=null;
+		removedAction();}
 
 	public final void openPage(){
 		for (Page childPage : childPages){

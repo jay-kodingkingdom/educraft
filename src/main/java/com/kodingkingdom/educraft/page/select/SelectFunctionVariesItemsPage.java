@@ -5,7 +5,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.kodingkingdom.educraft.EduCraftPlugin;
-import com.kodingkingdom.educraft.page.Box;
 import com.kodingkingdom.educraft.page.BoxPage;
 import com.kodingkingdom.educraft.page.Menu;
 

@@ -41,7 +41,7 @@ public class Menu extends BoxPage implements Listener{
 		
 		menu.itemMap = new HashMap<Integer,MenuItem>();
 		menu.slotMap = new HashMap<MenuItem,Integer>();
-		menu.menuItemsBox = new Box<MenuItem>(new MenuItem[MenuWidth][MenuHeight]);
+		menu.menuItemsBox = menu.new Box<MenuItem>(new MenuItem[MenuWidth][MenuHeight]);
 		
 		for (int widthX=0;widthX<MenuWidth;widthX++){
 			for (int heightY=0;heightY<MenuHeight;heightY++){

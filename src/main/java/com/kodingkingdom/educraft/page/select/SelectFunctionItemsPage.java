@@ -2,9 +2,9 @@ package com.kodingkingdom.educraft.page.select;
 
 import java.util.function.Function;
 
-import com.kodingkingdom.educraft.page.Box;
 import com.kodingkingdom.educraft.page.BoxPage;
 import com.kodingkingdom.educraft.page.Menu;
+import com.kodingkingdom.educraft.page.Menu.MenuItem;
 
 public class SelectFunctionItemsPage<T> extends BoxPage{
 
@@ -35,8 +35,8 @@ public class SelectFunctionItemsPage<T> extends BoxPage{
 				if (menuItemsBox.getBoxItem(widthX, heightY).equals(item)){
 					SelectItem.normalize(function.apply(selectItemsBox.getBoxItem(widthX, heightY))).action.run();}}}}
 	
-	public Connector makePageConnector(BoxPage parentPage, int widthX1, int heightY1, int widthX2, int heightY2){
-		if (widthX2-widthX1+1 != selectItemsBox.getWidth() ||
-			heightY2-heightY1+1 != selectItemsBox.getHeight()) throw new IllegalArgumentException();
+	public Connector makePageConnector(Box<MenuItem> menuItemsBox){
+		if (menuItemsBox.getWidth() != selectItemsBox.getWidth() ||
+			menuItemsBox.getHeight() != selectItemsBox.getHeight()) throw new IllegalArgumentException();
 		else 
-			return super.makePageConnector(parentPage, widthX1, heightY1, widthX2, heightY2);}}
+			return super.makePageConnector(menuItemsBox);}}
