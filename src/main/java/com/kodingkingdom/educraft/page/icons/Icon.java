@@ -64,6 +64,7 @@ public class Icon {;
 			materialIconMap.put(material, this);}}
 
 	public static Icon makeIcon(String name){
+		EduCraftPlugin.debug("icon out of "+name);
 		return makeIcon(Material.ENCHANTED_BOOK).withName(name).withCaption(name);}
 	
 	private static Icon makeTexturedIcon(){

@@ -1,14 +1,10 @@
 package com.kodingkingdom.educraft.page;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 import com.kodingkingdom.educraft.EduCraftPlugin;
-import com.kodingkingdom.educraft.page.Menu.MenuItem;
-import com.kodingkingdom.educraft.page.Page.Connector;
 
 public class CompositeBoxPage extends BoxPage{
 	HashMap<Menu.MenuItem,Page> compositeItemPageMap;
@@ -18,15 +14,17 @@ public class CompositeBoxPage extends BoxPage{
 	
 	public final void compose(Connector Connector){
 		Page childPage = Connector.getPage();
-		childPage.parentPage=this;
+		childPage.thisPointer=this;
 		for (Menu.MenuItem childItem : Connector.connectingItems){
-			childPage.itemPageMap.put(childItem, childPage);}
+			childPage.itemPageMap.put(childItem, childPage);
+			compositeItemPageMap.replace(childItem, childPage);}
 		childPage.attachedAction(Connector);}
 	
 	protected final void boxAttachedAction(Connector Connector){
-		for (Menu.MenuItem childItem : Connector.connectingItems){
-			compositeItemPageMap.put(childItem, this);}
-		compositeAttachedAction(Connector);}
+		if (Connector!=null){
+			for (Menu.MenuItem childItem : Connector.connectingItems){
+				compositeItemPageMap.put(childItem, this);}
+			compositeAttachedAction(Connector);}}
 	
 	protected final void clickItemAction(Menu.MenuItem item){
 		if (itemPageMap.get(item)==this){

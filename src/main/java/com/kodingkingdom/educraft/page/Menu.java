@@ -89,7 +89,7 @@ public class Menu extends CompositeBoxPage implements Listener{
 	public void closeMenu(InventoryCloseEvent e){
 		if (e.getInventory().equals(menuMenu)){
 			closePage();}}
-	
+
 	public MenuItem normalize(MenuItem menuItem){
 		if (menuItem==null) return Null;
 		else return menuItem;}
@@ -97,18 +97,36 @@ public class Menu extends CompositeBoxPage implements Listener{
 	public final MenuItem Null = new MenuItem(null);
 	
 	public class MenuItem {
-		private ItemStack itemIcon;
+		private HashMap<Page,ItemStack> ownerIconMap;
+		
+		private Page owner;
+		
+		Page getOwner(){
+			return owner;}
+		
+		void setOwner(Page Owner){
+			if (!ownerIconMap.containsKey(Owner)){
+				ownerIconMap.put(Owner,getIcon());}
+			owner=Owner;
+			update();}
 		
 		MenuItem(ItemStack ItemIcon){
-			itemIcon=ItemIcon;}
+			owner = Menu.this;
+			ownerIconMap=new HashMap<Page,ItemStack>();
+			ownerIconMap.put(owner,ItemIcon);}
 		
 		public ItemStack getIcon(){
-			return itemIcon;}
+			return ownerIconMap.get(getOwner());}
 		
-		public void setIcon(ItemStack ItemIcon, Page whoAreYou){
-			Page Owner = Menu.this;
-			while (!Owner.itemPageMap.get(this).equals(Owner)){
-				Owner = Owner.itemPageMap.get(this);}
-			if (Owner.equals(whoAreYou)){
-				itemIcon = ItemIcon;
-				Menu.this.menuMenu.setItem(Menu.this.slotMap.get(this), itemIcon);}}}}
+		void setIcon(ItemStack ItemIcon){
+			ownerIconMap.replace(getOwner(),ItemIcon);
+			update();}
+
+		void setIcon(Page Owner, ItemStack ItemIcon){
+			ownerIconMap.replace(Owner,ItemIcon);
+			if (Owner==getOwner()) update();}
+		
+		private void update(){
+			Menu thisMenu=Menu.this;
+			thisMenu.menuMenu.setItem(thisMenu.slotMap.get(this), getIcon());
+			EduCraftPlugin.debug("icon is "+getIcon());}}}

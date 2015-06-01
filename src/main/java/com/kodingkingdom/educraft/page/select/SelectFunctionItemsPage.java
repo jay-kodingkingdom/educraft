@@ -2,6 +2,7 @@ package com.kodingkingdom.educraft.page.select;
 
 import java.util.function.Function;
 
+import com.kodingkingdom.educraft.EduCraftPlugin;
 import com.kodingkingdom.educraft.page.BoxPage;
 import com.kodingkingdom.educraft.page.Menu;
 import com.kodingkingdom.educraft.page.Menu.MenuItem;
@@ -18,19 +19,20 @@ public class SelectFunctionItemsPage<T> extends BoxPage{
 	protected void boxAttachedAction(Connector connector){
 		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
 			for (int heightY=0;heightY<menuItemsBox.getHeight();heightY++){
-				menuItemsBox.getBoxItem(widthX, heightY).setIcon(
-						SelectItem.normalize(function.apply(selectItemsBox.getBoxItem(widthX, heightY))).icon, this);}}}
+				setIcon(menuItemsBox.getBoxItem(widthX, heightY)
+					,SelectItem.normalize(function.apply(selectItemsBox.getBoxItem(widthX, heightY))).icon);}}}
 	
 	protected void boxRemovedAction(){
 		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
 			for (int heightY=0;heightY<menuItemsBox.getHeight();heightY++){
-				menuItemsBox.getBoxItem(widthX, heightY).setIcon(
-						null, this);}}}
+				setIcon(menuItemsBox.getBoxItem(widthX, heightY)
+					,null);}}}
 	
 	protected void clickItemAction(Menu.MenuItem item){
-		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
-			for (int heightY=0;heightY<menuItemsBox.getHeight();heightY++){
-				if (menuItemsBox.getBoxItem(widthX, heightY).equals(item)){
+		Box<MenuItem> menuItems=getSubBox(0, 0, getWidth()-1, getHeight()-1);
+		for (int widthX=0;widthX<menuItems.getWidth();widthX++){
+			for (int heightY=0;heightY<menuItems.getHeight();heightY++){
+				if (menuItems.getBoxItem(widthX, heightY).equals(item)){
 					SelectItem.normalize(function.apply(selectItemsBox.getBoxItem(widthX, heightY))).action.run();}}}}
 	
 	public Connector makePageConnector(Box<MenuItem> menuItemsBox){

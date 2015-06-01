@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.bukkit.inventory.ItemStack;
+
 import com.kodingkingdom.educraft.EduCraftPlugin;
 import com.kodingkingdom.educraft.page.Menu.MenuItem;
 
@@ -24,15 +26,15 @@ public class Page {
 		childPages.add(childPage);
 		for (Menu.MenuItem childItem : Connector.connectingItems){
 			childPage.itemPageMap.put(childItem, childPage);
-			itemPageMap.replace(childItem, childPage);}
+			itemPageMap.replace(childItem, childPage);
+			if (childItem.getOwner()==this) childItem.setOwner(childPage);}
 		childPage.attachedAction(Connector);}
 	
 	public final void remove(){
-		if (parentPage!=null) {
-			parentPage.removeAction();}
 		for (Menu.MenuItem childItem : itemPageMap.keySet().toArray(new Menu.MenuItem [0])){
 			if (parentPage!=null) parentPage.itemPageMap.replace(childItem, parentPage);
-			itemPageMap.remove(childItem);}
+			itemPageMap.remove(childItem);
+			if (childItem.getOwner()==this) childItem.setOwner(parentPage);}
 		if (parentPage!=null) {
 			parentPage.childPages.remove(this);
 			parentPage=null;}
@@ -47,7 +49,7 @@ public class Page {
 		for (Page childPage : childPages){
 			childPage.closePage();}
 		removedAction();}
-	
+
 	public final void clickItem(Menu.MenuItem item){
 		EduCraftPlugin.debug("recieved click in page "+this);
 		if (itemPageMap.get(item)==this){
@@ -57,6 +59,11 @@ public class Page {
 			clickItemAction(item);
 			itemPageMap.get(item).clickItem(item);}}
 
+	Page thisPointer = this;
+	
+	protected final void setIcon(Menu.MenuItem item, ItemStack itemIcon){
+		item.setIcon(thisPointer,itemIcon);}
+	
 	public Connector makePageConnector(Page parentPage){
 		if (parentPage==null) throw new IllegalStateException();
 		HashSet<MenuItem> emptyItems = new HashSet<MenuItem>();
@@ -66,13 +73,11 @@ public class Page {
 		return makePageConnector(emptyItems);}
 		
 	protected void attachedAction(Connector connector){}
-	
-	protected void removeAction(){}
-		
+			
 	protected void removedAction(){}
 	
 	protected void clickItemAction(Menu.MenuItem item){}
-	
+		
 	protected final Connector makePageConnector(Collection<Menu.MenuItem> connectingItems){
 		return new Connector(connectingItems);}
 	

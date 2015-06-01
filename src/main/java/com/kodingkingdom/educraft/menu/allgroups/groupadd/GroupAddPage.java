@@ -13,7 +13,7 @@ public class GroupAddPage extends CompositeBoxPage {
 		VaryNamePage namePage = new VaryNamePage(()->{return groupName;}, getHeight());
 		ControlsPage controlsPage = new ControlsPage(
 				()->{
-					groupName=groupName.substring(0, groupName.length());}
+					groupName=(!groupName.equals("")?groupName.substring(0, groupName.length()-1):"");}
 				, ()->{
 					Group.create(groupName);
 					GroupAddPage thisPage = GroupAddPage.this;
@@ -24,7 +24,7 @@ public class GroupAddPage extends CompositeBoxPage {
 				, null, null, null, null, null);
 		GroupAddContentPage contentPage = new GroupAddContentPage(
 				letter->{
-					String newGroupName = letter + groupName;
+					String newGroupName = groupName + letter;
 					if (newGroupName.length()<=getHeight()) groupName=newGroupName;}
 				, getWidth()-1, getHeight()-1);
 		this.compose(namePage.makePageConnector(this.getSubBox(0, 0, 0, menuItemsBox.getHeight()-1)));
