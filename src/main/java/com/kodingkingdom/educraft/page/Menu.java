@@ -9,13 +9,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.kodingkingdom.educraft.EduCraftPlugin;
 
-public class Menu extends BoxPage implements Listener{
+public class Menu extends CompositeBoxPage implements Listener{
 	
 	String menuName;
 	int menuWidth,menuHeight;
@@ -41,7 +42,7 @@ public class Menu extends BoxPage implements Listener{
 		
 		menu.itemMap = new HashMap<Integer,MenuItem>();
 		menu.slotMap = new HashMap<MenuItem,Integer>();
-		menu.menuItemsBox = menu.new Box<MenuItem>(new MenuItem[MenuWidth][MenuHeight]);
+		menu.menuItemsBox = menu.new Box<MenuItem>(new MenuItem[MenuHeight][MenuWidth]);
 		
 		for (int widthX=0;widthX<MenuWidth;widthX++){
 			for (int heightY=0;heightY<MenuHeight;heightY++){
@@ -76,15 +77,24 @@ public class Menu extends BoxPage implements Listener{
 			e.getPlayer().openInventory(menuMenu);
 			openPage();}}
 	@EventHandler(priority=EventPriority.MONITOR)
+	public void clickMenu(InventoryDragEvent e){
+		if (menuMenu.equals(e.getInventory())){
+			e.setCancelled(true);}}
+	@EventHandler(priority=EventPriority.MONITOR)
 	public void clickMenu(InventoryClickEvent e){
 		if (menuMenu.equals(e.getClickedInventory())){
 			e.setCancelled(true);
-			if (e.getCursor()==null)return;
-			clickItem(itemMap.get(e.getRawSlot()));}}
+			clickItem(normalize(itemMap.get(e.getRawSlot())));}}
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void closeMenu(InventoryCloseEvent e){
 		if (e.getInventory().equals(menuMenu)){
 			closePage();}}
+	
+	public MenuItem normalize(MenuItem menuItem){
+		if (menuItem==null) return Null;
+		else return menuItem;}
+	
+	public final MenuItem Null = new MenuItem(null);
 	
 	public class MenuItem {
 		private ItemStack itemIcon;
@@ -95,6 +105,10 @@ public class Menu extends BoxPage implements Listener{
 		public ItemStack getIcon(){
 			return itemIcon;}
 		
-		public void setIcon(ItemStack ItemIcon){
-			itemIcon = ItemIcon;
-			Menu.this.menuMenu.setItem(Menu.this.slotMap.get(this), itemIcon);}}}
+		public void setIcon(ItemStack ItemIcon, Page whoAreYou){
+			Page Owner = Menu.this;
+			while (!Owner.itemPageMap.get(this).equals(Owner)){
+				Owner = Owner.itemPageMap.get(this);}
+			if (Owner.equals(whoAreYou)){
+				itemIcon = ItemIcon;
+				Menu.this.menuMenu.setItem(Menu.this.slotMap.get(this), itemIcon);}}}}

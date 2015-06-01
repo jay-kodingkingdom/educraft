@@ -10,10 +10,10 @@ public class ControlsPage extends SelectItemsPage{
 			{Icon.makeIcon("+"),Icon.makeIcon("2"),Icon.makeIcon("3"),Icon.makeIcon("4"),Icon.makeIcon("5"),Icon.makeIcon("6"),Icon.makeIcon("7"),Icon.makeIcon("8")};
 	
 	private static SelectItem[][] makeSelectItems(Runnable[] controlsActions){
-		SelectItem[][] selectItems = new SelectItem[controlsActions.length][1];
+		SelectItem[][] selectItems = new SelectItem[1][controlsActions.length];
 		for (int widthX=0;widthX<controlsActions.length;widthX++){
-			if (controlsActions[widthX]==null) selectItems[widthX][0]=SelectItem.Null;
-			else selectItems[widthX][0]=
+			if (controlsActions[widthX]==null) selectItems[0][widthX]=SelectItem.Null;
+			else selectItems[0][widthX]=
 					new SelectItem(
 						controlsActions[widthX]
 						,controlsIcons[widthX].asIcon());}

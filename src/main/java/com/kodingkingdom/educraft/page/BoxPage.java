@@ -3,6 +3,7 @@ package com.kodingkingdom.educraft.page;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import com.kodingkingdom.educraft.EduCraftPlugin;
 import com.kodingkingdom.educraft.page.Menu.MenuItem;
 
 public class BoxPage extends Page{
@@ -19,18 +20,24 @@ public class BoxPage extends Page{
 	public Box<MenuItem> getSubBox(int widthX1, int heightY1, int widthX2, int heightY2){
 		return menuItemsBox.getSubBox(widthX1, heightY1, widthX2, heightY2);}
 
-	protected void attachedAction(Connector connector){
-		if (connector!=null && !(connector.connectorData instanceof BoxConnectorData)) throw new RuntimeException();
-		BoxConnectorData boxConnectorData = (BoxConnectorData)connector.connectorData;
-		menuItemsBox = boxConnectorData.menuItemsBox;}
+	protected final void attachedAction(Connector connector){
+		if (connector!=null){
+			if (!(connector.connectorData instanceof BoxConnectorData)) throw new RuntimeException();
+			BoxConnectorData boxConnectorData = (BoxConnectorData)connector.connectorData;
+			menuItemsBox = boxConnectorData.menuItemsBox;}
+		boxAttachedAction(connector);}
 	
-	protected void removedAction(){
+	protected final void removedAction(){
+		boxRemovedAction();
 		menuItemsBox=null;}
+	
+	protected void boxAttachedAction(Connector connector){}
+	
+	protected void boxRemovedAction(){}
 	
 	public final Connector makePageConnector(Page parentPage){
 		throw new UnsupportedOperationException();}
 	public Connector makePageConnector(Box<MenuItem> menuItemsBox){
-		BoxPage parentPage = menuItemsBox.getPage();
 		return makePageConnector(
 				menuItemsBox.asCollection())
 					.with(new BoxConnectorData(menuItemsBox));}
@@ -58,14 +65,14 @@ public class BoxPage extends Page{
 		public int getHeight(){
 			return height;}
 		public T getBoxItem(int widthX, int heightY){
-			return boxArray[widthX][heightY];}
+			return boxArray[heightY][widthX];}
 		
 		public int getSlotNumber(int widthX, int heightY){
 			return (widthX) +
 					(heightY) * width;}
 		
 		void setBoxItem(int widthX, int heightY, T item){
-			boxArray[widthX][heightY]=item;}
+			boxArray[heightY][widthX]=item;}
 
 		public boolean isSubBox(Box<T> subBox){
 			int widthX1=-1, heightY1=-1;
@@ -80,10 +87,11 @@ public class BoxPage extends Page{
 						return true;}}}
 			return false;}
 		public Box<T> getSubBox(int widthX1, int heightY1, int widthX2, int heightY2){
-			T[][] subBoxArray = (T[][])new Object[widthX2-widthX2+1][heightY2-heightY1+1];
+			T[][] subBoxArray = (T[][])new Object[heightY2-heightY1+1][widthX2-widthX1+1];
 			for (int widthX=widthX1;widthX<=widthX2;widthX++){
 				for (int heightY=heightY1;heightY<=heightY2;heightY++){
-					subBoxArray[widthX-widthX1][heightY-heightY1]=boxArray[widthX][heightY];}}
+					EduCraftPlugin.debug("widthX-widthX1 is "+(widthX-widthX1)+"\nheightY-heightY1 is "+(heightY-heightY1)+"\nwidthX is "+widthX+"\nheightY is"+heightY);
+					subBoxArray[heightY-heightY1][widthX-widthX1]=boxArray[heightY][widthX];}}
 			return new Box<T> (subBoxArray);}
 		
 		public BoxPage getPage(){
@@ -94,6 +102,8 @@ public class BoxPage extends Page{
 			LinkedList<T> boxCollection = new LinkedList<T>();
 			for (int widthX=0;widthX<width;widthX++){
 				for (int heightY=0;heightY<height;heightY++){
+					EduCraftPlugin.debug("widthX is "+widthX+"\nheightY is"+heightY);
+					EduCraftPlugin.debug("width is "+width+"\nheight is"+height);
 					boxCollection.add(getBoxItem(widthX,heightY));}}
 			return boxCollection;}}
 }

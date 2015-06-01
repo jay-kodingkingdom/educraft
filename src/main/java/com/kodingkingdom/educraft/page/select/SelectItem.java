@@ -7,7 +7,7 @@ public class SelectItem{
 	ItemStack icon;
 	public SelectItem(Runnable Action,ItemStack Icon){
 		action=Action;
-		icon=Icon.clone();}
+		icon=(Icon!=null?Icon.clone():null);}
 
 	public Runnable getAction(){
 		return ()->action.run();}

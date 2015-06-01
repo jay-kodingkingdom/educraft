@@ -11,7 +11,10 @@ public class TeacherMenu {
 	public Menu teacherMenu;
 	public ItemStack menuIcon;
 	public static long pollInterval=8;
-	public static ItemStack groupsIcon;
+	public static ItemStack groupsIcon=
+			Icon.makeIcon(Material.ENCHANTED_BOOK)
+			.withName("All of this")
+			.asIcon();
 	
 	public TeacherMenu(){
 		menuIcon = Icon.makeIcon(Material.ENCHANTED_BOOK)

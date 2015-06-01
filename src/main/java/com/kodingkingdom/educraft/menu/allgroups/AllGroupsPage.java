@@ -15,17 +15,17 @@ public class AllGroupsPage extends CompositeBoxPage {
 				()->{
 					AllGroupsPage thisPage = AllGroupsPage.this; 
 					GroupAddPage newPage = new GroupAddPage();
-					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth(), getHeight())));}
+					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
 				, ()->{
 					AllGroupsPage thisPage = AllGroupsPage.this; 
 					GroupRemovePage newPage = new GroupRemovePage();
-					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth(), getHeight())));}
+					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
 				, null, null, null, null, null, null);
 		AllGroupsContentPage contentPage = new AllGroupsContentPage(
 				group->{
 					AllGroupsPage thisPage = AllGroupsPage.this;
 					GroupPage newPage = new GroupPage(group);
-					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth(), getHeight())));}
+					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
 				, ()->{
 					return TeacherMenu.groupsIcon;});
 		this.compose(namePage.makePageConnector(this.getSubBox(0, 0, 0, menuItemsBox.getHeight()-1)));

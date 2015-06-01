@@ -17,7 +17,9 @@ public class GroupRemovePage extends CompositeBoxPage {
 				, null, null, null, null, null);
 		GroupRemoveContentPage contentPage = new GroupRemoveContentPage(
 				group->{
-					Group.delete(group);}
+					Group.delete(group);
+					GroupRemovePage thisPage = GroupRemovePage.this;
+					thisPage.remove();}
 				, ()->{
 					return TeacherMenu.groupsIcon;});
 		this.compose(namePage.makePageConnector(this.getSubBox(0, 0, 0, menuItemsBox.getHeight()-1)));

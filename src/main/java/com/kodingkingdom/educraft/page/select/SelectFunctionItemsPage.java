@@ -15,23 +15,21 @@ public class SelectFunctionItemsPage<T> extends BoxPage{
 		selectItemsBox=new Box<T>(SelectItems);
 		function=Function;}
 	
-	protected void attachedAction(Connector connector){
-		super.attachedAction(connector);
+	protected void boxAttachedAction(Connector connector){
 		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
-			for (int heightY=0;heightY<menuItemsBox.getWidth();heightY++){
+			for (int heightY=0;heightY<menuItemsBox.getHeight();heightY++){
 				menuItemsBox.getBoxItem(widthX, heightY).setIcon(
-						SelectItem.normalize(function.apply(selectItemsBox.getBoxItem(widthX, heightY))).icon);}}}
+						SelectItem.normalize(function.apply(selectItemsBox.getBoxItem(widthX, heightY))).icon, this);}}}
 	
-	protected void removedAction(){
+	protected void boxRemovedAction(){
 		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
-			for (int heightY=0;heightY<menuItemsBox.getWidth();heightY++){
+			for (int heightY=0;heightY<menuItemsBox.getHeight();heightY++){
 				menuItemsBox.getBoxItem(widthX, heightY).setIcon(
-						null);}}
-		super.removedAction();}
+						null, this);}}}
 	
 	protected void clickItemAction(Menu.MenuItem item){
 		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
-			for (int heightY=0;heightY<menuItemsBox.getWidth();heightY++){
+			for (int heightY=0;heightY<menuItemsBox.getHeight();heightY++){
 				if (menuItemsBox.getBoxItem(widthX, heightY).equals(item)){
 					SelectItem.normalize(function.apply(selectItemsBox.getBoxItem(widthX, heightY))).action.run();}}}}
 	

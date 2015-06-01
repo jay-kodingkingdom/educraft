@@ -23,14 +23,15 @@ public class SelectFunctionSortedAllPage<T extends Comparable<? super T>> extend
 						ArrayList<T> ts=new ArrayList<T>(Ts.get());
 						Collections.sort(ts);
 						ArrayList<T[]> tsList=new ArrayList<T[]>();
-						tsList.add(ts.toArray((T[])new Object[0]));
+						tsList.add(ts.toArray((T[])new Comparable[0]));
 						ts.forEach(
 							(T t)->{
-								tsList.add((T[])new Object[]{t});});
+								tsList.add((T[])new Comparable[]{t});});
 						return tsList;}},
 				(T[] ts)->{return
 					new SelectItem(()->{
-						for(T t : ts){
-							Function.apply(t).getAction().run();}}
-						,(ts.length==1?Function.apply(ts[0]).getIcon():GroupIcon.get()));}
+						if (ts!=null)
+							for(T t : ts){
+								Function.apply(t).getAction().run();}}
+						,(ts!=null?(ts.length==1?Function.apply(ts[0]).getIcon():GroupIcon.get()):null));}
 				, PollInterval);}}

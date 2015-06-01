@@ -40,11 +40,11 @@ public class SelectFunctionVariesItemsPage<T> extends BoxPage{
 	void updateSelectItems(){
 		selectItemsList=selectItemsGetter.get();
 		int pageLength = menuItemsBox.getHeight()*menuItemsBox.getWidth();
-		T[][] selectItems = (T[][])new Object[menuItemsBox.getWidth()][menuItemsBox.getHeight()]; 
+		T[][] selectItems = (T[][])new Object[menuItemsBox.getHeight()][menuItemsBox.getWidth()]; 
 		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
 			for (int heightY=0;heightY<menuItemsBox.getHeight();heightY++){
 				int X=widthX,Y=heightY;
-				selectItems[widthX][heightY]=
+				selectItems[heightY][widthX]=
 						normalize(()->{
 							return selectItemsList.get(
 								pageNumber*pageLength+
@@ -53,26 +53,24 @@ public class SelectFunctionVariesItemsPage<T> extends BoxPage{
 	
 	void updateMenuItems(){
 		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
-			for (int heightY=0;heightY<menuItemsBox.getWidth();heightY++){
+			for (int heightY=0;heightY<menuItemsBox.getHeight();heightY++){
 				menuItemsBox.getBoxItem(widthX, heightY).setIcon(
-						SelectItem.normalize(function.apply(selectItemsBox.getBoxItem(widthX, heightY))).icon);}}}
+						SelectItem.normalize(function.apply(selectItemsBox.getBoxItem(widthX, heightY))).icon, this);}}}
 	
-	protected void attachedAction(Connector connector){
-		super.attachedAction(connector);
+	protected void boxAttachedAction(Connector connector){
 		updatePage();}
 	
-	protected void removedAction(){
+	protected void boxRemovedAction(){
 		if (pollId!=-1) {
 			EduCraftPlugin.getPlugin().getEduCraft().cancelTask(pollId);
 			pollId=-1;}
 		
 		function=(T t)->{return SelectItem.Null;};
-		updateMenuItems();
-		super.removedAction();}
+		updateMenuItems();}
 	
 	protected void clickItemAction(Menu.MenuItem item){
 		for (int widthX=0;widthX<menuItemsBox.getWidth();widthX++){
-			for (int heightY=0;heightY<menuItemsBox.getWidth();heightY++){
+			for (int heightY=0;heightY<menuItemsBox.getHeight();heightY++){
 				if (menuItemsBox.getBoxItem(widthX, heightY).equals(item)){
 					SelectItem.normalize(function.apply(selectItemsBox.getBoxItem(widthX, heightY))).action.run();}}}}
 
