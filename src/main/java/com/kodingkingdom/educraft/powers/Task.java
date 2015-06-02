@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import com.kodingkingdom.educraft.group.users.Student;
 
-public class Task {
+public class Task implements Comparable<Task>{
 
 	HashMap<Student,TaskItem> studentTaskMap;
 
@@ -39,4 +39,7 @@ public class Task {
 		public Student getStudent(){
 			return taskStudent;}
 		public Task getTask(){
-			return Task.this;}}}
+			return Task.this;}}
+
+	public int compareTo(Task o) {
+		return 0;}}

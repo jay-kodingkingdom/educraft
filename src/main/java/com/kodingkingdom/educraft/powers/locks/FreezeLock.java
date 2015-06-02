@@ -11,6 +11,8 @@ import com.kodingkingdom.educraft.group.users.Student;
 import com.kodingkingdom.educraft.powers.Lock;
 
 public class FreezeLock extends Lock implements Listener{
+	public final String getName(){
+		return "FreezeLock";}
 	public FreezeLock(){
 		EduCraftPlugin.getPlugin().getEduCraft().registerEvents(this);}
 	protected final void lockAction(LockItem lockItem){

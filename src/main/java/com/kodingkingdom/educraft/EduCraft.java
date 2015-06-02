@@ -9,17 +9,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import com.kodingkingdom.educraft.menu.TeacherMenu;
+import com.kodingkingdom.educraft.group.users.Teacher;
+import com.kodingkingdom.educraft.menu.Bible;
 
 public class EduCraft implements Listener, CommandExecutor{
 
 	EduCraftPlugin plugin;	
 	public EduCraft(EduCraftPlugin Plugin){plugin=Plugin;}
 	
-	TeacherMenu teacherMenu;
-	
 	public void Live(){
-		teacherMenu=new TeacherMenu();
 		plugin.getCommand("edu").setExecutor(this);
 		plugin.getCommand("educraft").setExecutor(this);
 		registerEvents(this);}
@@ -37,17 +35,23 @@ public class EduCraft implements Listener, CommandExecutor{
 		plugin.getServer().getScheduler().cancelTask(taskId);}
 
 	@EventHandler
-	public void giveTeacherMenu(PlayerJoinEvent e){
+	public void giveBible(PlayerJoinEvent e){
 		if (e.getPlayer().isOp()) {
-			giveTeacherMenu(e.getPlayer());}}
+			giveBible(e.getPlayer());}}
 	
-	private void giveTeacherMenu(Player player){
+	private void giveBible(Player player){
 		int slotNumber=0;
+		Bible newBible = new Bible(Teacher.getTeacher(player.getUniqueId()));
+		EduCraftPlugin.debug("new bible is "+newBible);
 		for (;slotNumber<player.getInventory().getSize();slotNumber++){
 			if (player.getInventory().getItem(slotNumber)==null) break;}
 		if (slotNumber<player.getInventory().getSize())
-			player.getInventory().setItem(slotNumber,teacherMenu.menuIcon);
-		else player.setItemInHand(teacherMenu.menuIcon);}
+			{EduCraftPlugin.debug("put bible in slot "+slotNumber);
+			player.getInventory().setItem(slotNumber,newBible.getIcon());}
+		else {
+			EduCraftPlugin.debug("put bible in hand");
+			player.setItemInHand(newBible.getIcon());}
+		player.updateInventory();}
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
@@ -59,7 +63,7 @@ public class EduCraft implements Listener, CommandExecutor{
 		if (args.length==1){
 			if (args[0].equalsIgnoreCase("giveMenu")){ 
 				if (sender instanceof Player){
-					giveTeacherMenu((Player)sender);
+					giveBible((Player)sender);
 					sender.sendMessage("Teacher menu given");
 					return true;}
 				else {
@@ -69,7 +73,7 @@ public class EduCraft implements Listener, CommandExecutor{
 			if (args[0].equalsIgnoreCase("giveMenu")){
 				Player player = Bukkit.getPlayer(args[1]);
 				if (player != null){
-					giveTeacherMenu((Player)sender);
+					giveBible(player);
 					sender.sendMessage("Teacher menu given");
 					return true;}
 				else {

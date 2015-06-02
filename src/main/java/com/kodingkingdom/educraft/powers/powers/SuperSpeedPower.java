@@ -5,16 +5,22 @@ import org.bukkit.entity.Player;
 import com.kodingkingdom.educraft.powers.Power;
 
 public class SuperSpeedPower extends Power{
+	
+	public final String getName(){
+		return "SuperSpeedPower";}
+	
 	protected final void doAction(PowerItem powerItem){
 		final Player player = powerItem.getUser().getPlayer();
 		if (player!=null){
 			player.setFlySpeed(getRealMoveSpeed(10F, true, false));
-			player.setWalkSpeed(getRealMoveSpeed(10F, false, false));}}
+			player.setWalkSpeed(getRealMoveSpeed(10F, false, false));
+			player.sendMessage("You have activated the superspeed power!");}}
 	protected final void undoAction(PowerItem powerItem){
 		final Player player = powerItem.getUser().getPlayer();
 		if (player!=null){
 			player.setFlySpeed(getRealMoveSpeed(1F, true, false));
-			player.setWalkSpeed(getRealMoveSpeed(1F, false, false));}}
+			player.setWalkSpeed(getRealMoveSpeed(1F, false, false));
+			player.sendMessage("You have deactivated the superspeed power!");}}
 	
 
 	private float getRealMoveSpeed(final float userSpeed, final boolean isFly, final boolean isBypass){

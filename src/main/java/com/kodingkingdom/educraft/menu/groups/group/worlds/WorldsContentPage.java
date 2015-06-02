@@ -1,4 +1,4 @@
-package com.kodingkingdom.educraft.menu.allgroups.groupremove;
+package com.kodingkingdom.educraft.menu.groups.group.worlds;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -6,14 +6,14 @@ import java.util.function.Supplier;
 import org.bukkit.inventory.ItemStack;
 
 import com.kodingkingdom.educraft.group.Group;
-import com.kodingkingdom.educraft.menu.TeacherMenu;
+import com.kodingkingdom.educraft.menu.Bible;
 import com.kodingkingdom.educraft.page.icons.Icon;
 import com.kodingkingdom.educraft.page.select.SelectItem;
-import com.kodingkingdom.educraft.page.select.selects.SelectFunctionSortedAllPage;
+import com.kodingkingdom.educraft.page.select.selects.SelectFunctionSortedPage;
 
-public class GroupRemoveContentPage extends SelectFunctionSortedAllPage<Group>{
+public class WorldsContentPage extends SelectFunctionSortedPage<Group>{
 
-	public GroupRemoveContentPage(Consumer<Group> GroupAction, Supplier<ItemStack> GroupIcon) {
+	public WorldsContentPage(Consumer<Group> GroupAction, Supplier<ItemStack> GroupIcon) {
 		super(
 			()->{
 				return Group.getGroups();}
@@ -22,4 +22,4 @@ public class GroupRemoveContentPage extends SelectFunctionSortedAllPage<Group>{
 						()->{
 							GroupAction.accept(group);}
 						,Icon.makeIcon(group.getName()).asIcon());}
-			, GroupIcon, TeacherMenu.pollInterval);}}
+			, Bible.pollInterval);}}

@@ -2,8 +2,10 @@ package com.kodingkingdom.educraft.page;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -15,6 +17,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.kodingkingdom.educraft.EduCraftPlugin;
+import com.kodingkingdom.educraft.group.User;
 
 public class Menu extends CompositeBoxPage implements Listener{
 	
@@ -26,17 +29,20 @@ public class Menu extends CompositeBoxPage implements Listener{
 	HashMap<Integer,MenuItem> itemMap;
 	HashMap<MenuItem,Integer> slotMap;
 	
+	User menuUser;
+	
 	private Menu(){}
 	
 	static HashSet<Menu> menus=new HashSet<Menu>();
 	
-	public static Menu createMenu(int MenuWidth, int MenuHeight, String MenuName, ItemStack MenuIcon){
+	public static Menu createMenu(int MenuWidth, int MenuHeight, String MenuName, ItemStack MenuIcon, User MenuUser){
 		Menu menu = new Menu();
 		
 		menu.menuName=MenuName;
 		menu.menuWidth=MenuWidth;
 		menu.menuHeight=MenuHeight;
 		menu.menuIcon=MenuIcon;
+		menu.menuUser=MenuUser;
 		menu.menuMenu = Bukkit.createInventory(null, MenuWidth * MenuHeight, MenuName);
 		EduCraftPlugin.debug("size of inv is "+menu.menuMenu.getSize());
 		
@@ -73,7 +79,9 @@ public class Menu extends CompositeBoxPage implements Listener{
 	
 	@EventHandler
 	public void openMenu(PlayerInteractEvent e){
-		if (e.getItem()!=null && e.getItem().equals(menuIcon)){
+		if (e.getPlayer().isOp() &&
+				e.getPlayer().getUniqueId().equals(menuUser.getId()) &&
+				e.getItem()!=null && e.getItem().equals(menuIcon)){
 			e.getPlayer().openInventory(menuMenu);
 			openPage();}}
 	@EventHandler(priority=EventPriority.MONITOR)
@@ -85,7 +93,7 @@ public class Menu extends CompositeBoxPage implements Listener{
 		if (menuMenu.equals(e.getClickedInventory())){
 			e.setCancelled(true);
 			clickItem(normalize(itemMap.get(e.getRawSlot())));}}
-	@EventHandler(priority=EventPriority.MONITOR)
+	//@EventHandler(priority=EventPriority.MONITOR)
 	public void closeMenu(InventoryCloseEvent e){
 		if (e.getInventory().equals(menuMenu)){
 			closePage();}}
@@ -96,10 +104,19 @@ public class Menu extends CompositeBoxPage implements Listener{
 	
 	public final MenuItem Null = new MenuItem(null);
 	
+	public User getUser(){
+		return menuUser;}
+	
+	public static final Menu getMenu(Page page){
+		return page.itemPageMap.keySet().iterator().next().getMenu();}
+	
 	public class MenuItem {
 		private HashMap<Page,ItemStack> ownerIconMap;
 		
 		private Page owner;
+		
+		Menu getMenu(){
+			return Menu.this;}
 		
 		Page getOwner(){
 			return owner;}
@@ -127,6 +144,12 @@ public class Menu extends CompositeBoxPage implements Listener{
 			if (Owner==getOwner()) update();}
 		
 		private void update(){
-			Menu thisMenu=Menu.this;
+			Menu thisMenu=getMenu();
 			thisMenu.menuMenu.setItem(thisMenu.slotMap.get(this), getIcon());
-			EduCraftPlugin.debug("icon is "+getIcon());}}}
+			for (Player player : thisMenu.menuMenu.getViewers().stream()
+									.filter(entity -> entity instanceof Player)
+									.map(entity -> (Player)entity)
+									.collect(Collectors.toList())){
+				player.updateInventory();}
+			//EduCraftPlugin.debug("icon is "+getIcon());
+			}}}

@@ -1,10 +1,11 @@
-package com.kodingkingdom.educraft.menu.allgroups.groupremove;
+package com.kodingkingdom.educraft.menu.groups.remove;
 
 import com.kodingkingdom.educraft.group.Group;
-import com.kodingkingdom.educraft.menu.TeacherMenu;
 import com.kodingkingdom.educraft.menu.menus.ControlsPage;
 import com.kodingkingdom.educraft.menu.menus.NamePage;
 import com.kodingkingdom.educraft.page.CompositeBoxPage;
+import com.kodingkingdom.educraft.page.icons.Icon;
+import com.kodingkingdom.educraft.page.icons.Icon.Texture;
 
 public class GroupRemovePage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
@@ -21,7 +22,7 @@ public class GroupRemovePage extends CompositeBoxPage {
 					GroupRemovePage thisPage = GroupRemovePage.this;
 					thisPage.remove();}
 				, ()->{
-					return TeacherMenu.groupsIcon;});
-		this.compose(namePage.makePageConnector(this.getSubBox(0, 0, 0, menuItemsBox.getHeight()-1)));
-		this.compose(controlsPage.makePageConnector(this.getSubBox(1, menuItemsBox.getHeight()-1, menuItemsBox.getWidth()-1, menuItemsBox.getHeight()-1)));
-		this.compose(contentPage.makePageConnector(this.getSubBox(1, 0, menuItemsBox.getWidth()-1, menuItemsBox.getHeight()-2)));}}
+					return Icon.makeIcon(Texture.All).withName("All Groups").withCaption("All Groups").asIcon();});
+		this.compose(namePage.makePageConnector(this.getSubBox(0, 0, 0, getHeight()-1)));
+		this.compose(controlsPage.makePageConnector(this.getSubBox(1, getHeight()-1, getWidth()-1, getHeight()-1)));
+		this.compose(contentPage.makePageConnector(this.getSubBox(1, 0, getWidth()-1, getHeight()-2)));}}

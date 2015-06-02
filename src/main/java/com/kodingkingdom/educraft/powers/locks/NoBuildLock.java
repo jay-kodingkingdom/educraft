@@ -12,6 +12,8 @@ import com.kodingkingdom.educraft.group.users.Student;
 import com.kodingkingdom.educraft.powers.Lock;
 
 public class NoBuildLock extends Lock implements Listener{
+	public final String getName(){
+		return "NoBuildLock";}
 	public NoBuildLock(){
 		EduCraftPlugin.getPlugin().getEduCraft().registerEvents(this);}
 	protected final void lockAction(LockItem lockItem){

@@ -8,8 +8,11 @@ public class NamePage extends SelectItemsPage{
 
 	private static SelectItem[][] makeSelectItems(String name, int height){
 		SelectItem[][] selectItems = new SelectItem[height][1];
-		for (int heightY=0;heightY<height;heightY++){
+		int heightY=0;
+		for (;heightY<height&&heightY<name.length();heightY++){
 			selectItems[heightY][0]=new SelectItem(()->{}, Icon.makeIcon(""+name.charAt(heightY)).asIcon());}
+		for (;heightY<height;heightY++){
+			selectItems[heightY][0]=new SelectItem(()->{}, null);}
 		return selectItems;}
 	
 	public NamePage(String name, int height) {

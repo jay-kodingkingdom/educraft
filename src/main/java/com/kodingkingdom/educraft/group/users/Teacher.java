@@ -13,6 +13,6 @@ public class Teacher extends User{
 		super(Id);}	
 	
 	public static Teacher getTeacher(UUID id){
-		if (idTeacherMap.containsKey(id))
+		if (!idTeacherMap.containsKey(id))
 			idTeacherMap.put(id, new Teacher(id));
 		return idTeacherMap.get(id);}}

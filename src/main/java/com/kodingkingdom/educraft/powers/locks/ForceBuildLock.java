@@ -17,6 +17,8 @@ import com.kodingkingdom.educraft.powers.Lock;
 
 public class ForceBuildLock extends Lock implements Listener{
 	HashSet<Material> forceBuildMaterials;
+	public final String getName(){
+		return "ForceBuildLock";}
 	public ForceBuildLock(Collection<Material> ForceBuildMaterials){
 		forceBuildMaterials=new HashSet<Material>(ForceBuildMaterials);
 		EduCraftPlugin.getPlugin().getEduCraft().registerEvents(this);}

@@ -21,7 +21,7 @@ import com.wimbli.WorldBorder.CoordXZ;
 import com.wimbli.WorldBorder.WorldBorder;
 import com.wimbli.WorldBorder.WorldTrimTask;
 
-public class World {
+public class World implements Comparable<World>{
 	private static MultiverseCore multiverseCore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
 	private static String universeId = "eduCraft_universe";
 	
@@ -273,4 +273,7 @@ public class World {
 			int task = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(WorldBorder.plugin, Config.trimTask, ticks, ticks);
 			trimTask.setTaskID(task);}
 		else
-			throw new RuntimeException();}}
+			throw new RuntimeException();}
+	@Override
+	public int compareTo(World o) {
+		return name.compareTo(o.name);}}

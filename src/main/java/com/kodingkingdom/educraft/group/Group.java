@@ -7,6 +7,10 @@ import com.kodingkingdom.educraft.group.users.Student;
 import com.kodingkingdom.educraft.powers.Lock;
 import com.kodingkingdom.educraft.powers.Power;
 import com.kodingkingdom.educraft.powers.Task;
+import com.kodingkingdom.educraft.powers.locks.FreezeLock;
+import com.kodingkingdom.educraft.powers.locks.MuteLock;
+import com.kodingkingdom.educraft.powers.locks.NoBuildLock;
+import com.kodingkingdom.educraft.powers.powers.SuperSpeedPower;
 import com.kodingkingdom.educraft.resources.Plot;
 import com.kodingkingdom.educraft.resources.World;
 
@@ -81,7 +85,12 @@ public class Group implements Comparable<Group>{
 		group.plots=new HashSet<Plot>();
 		group.locks=new HashSet<Lock>();
 		group.powers=new HashSet<Power>();
-		
+		//
+		group.locks.add(new FreezeLock());
+		group.locks.add(new MuteLock());
+		group.locks.add(new NoBuildLock());
+		group.powers.add(new SuperSpeedPower());
+		//
 		groups.add(group);
 		return group;}
 	

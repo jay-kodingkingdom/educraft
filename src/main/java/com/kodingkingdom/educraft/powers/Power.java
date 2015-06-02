@@ -1,12 +1,19 @@
 package com.kodingkingdom.educraft.powers;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 import com.kodingkingdom.educraft.group.User;
 
-public class Power {
+public class Power implements Comparable<Power>{
 
-	protected HashMap<User,PowerItem> userPowerMap;
+	protected HashMap<User,PowerItem> userPowerMap=new HashMap<User,PowerItem> ();
+
+	public String getName(){
+		return "Power";}
+	
+	public HashSet<User> getStudents(){
+		return new HashSet<User> (userPowerMap.keySet());}
 
 	public final void give(User... powerUsers){
 		for (User powerUser : powerUsers){
@@ -15,7 +22,7 @@ public class Power {
 			doAction(powerItem);}}
 	public final void take(User... powerUsers){
 		for (User powerUser : powerUsers){
-			PowerItem powerItem = new PowerItem(powerUser);
+			PowerItem powerItem = userPowerMap.get(powerUser);
 			userPowerMap.remove(powerUser);
 			undoAction(powerItem);}}
 	
@@ -31,4 +38,8 @@ public class Power {
 		public User getUser(){
 			return user;}
 		public Power getPower(){
-			return Power.this;}}}
+			return Power.this;}}
+
+	@Override
+	public int compareTo(Power o) {
+		return getName().compareTo(o.getName());}}

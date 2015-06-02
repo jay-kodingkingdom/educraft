@@ -19,7 +19,7 @@ import com.worldcretornica.plotme.PlotManager;
 import com.worldcretornica.plotme.PlotMapInfo;
 import com.worldcretornica.plotme.SqlManager;
 
-public class Plot {
+public class Plot implements Comparable<Plot>{
 	private static MultiverseCore multiverseCore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
 	
 	private static HashSet<Plot> plots;
@@ -145,4 +145,8 @@ getPlot:
 		public Student getStudent(){
 			return plotStudent;}
 		public Plot getPlot(){
-			return Plot.this;}}}
+			return Plot.this;}}
+
+	@Override
+	public int compareTo(Plot o) {
+		return name.compareTo(o.name);}}

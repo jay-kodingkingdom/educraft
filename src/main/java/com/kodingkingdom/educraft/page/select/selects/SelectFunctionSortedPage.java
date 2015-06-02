@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.bukkit.inventory.ItemStack;
-
 import com.kodingkingdom.educraft.page.select.SelectFunctionVariesItemsPage;
 import com.kodingkingdom.educraft.page.select.SelectItem;
 
@@ -16,7 +14,7 @@ public class SelectFunctionSortedPage<T extends Comparable<? super T>> extends S
 
 	public SelectFunctionSortedPage(
 			Supplier<Collection<T>> Ts,
-			Function<T,SelectItem> Function, Supplier<ItemStack> GroupIcon, long PollInterval) {
+			Function<T,SelectItem> Function, long PollInterval) {
 		super(
 				new Supplier<List<T>>(){
 					public List<T> get(){

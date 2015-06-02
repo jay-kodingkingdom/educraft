@@ -1,4 +1,4 @@
-package com.kodingkingdom.educraft.menu.allgroups.groupadd;
+package com.kodingkingdom.educraft.menu.groups.add;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;

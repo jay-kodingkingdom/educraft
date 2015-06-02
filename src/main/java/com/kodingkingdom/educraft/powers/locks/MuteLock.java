@@ -11,6 +11,8 @@ import com.kodingkingdom.educraft.group.users.Student;
 import com.kodingkingdom.educraft.powers.Lock;
 
 public class MuteLock extends Lock implements Listener{
+	public final String getName(){
+		return "MuteLock";}
 	public MuteLock(){
 		EduCraftPlugin.getPlugin().getEduCraft().registerEvents(this);}
 	protected final void lockAction(LockItem lockItem){
