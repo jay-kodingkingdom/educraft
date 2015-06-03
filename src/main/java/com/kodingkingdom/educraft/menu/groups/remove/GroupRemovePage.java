@@ -5,7 +5,7 @@ import com.kodingkingdom.educraft.menu.menus.ControlsPage;
 import com.kodingkingdom.educraft.menu.menus.NamePage;
 import com.kodingkingdom.educraft.page.CompositeBoxPage;
 import com.kodingkingdom.educraft.page.icons.Icon;
-import com.kodingkingdom.educraft.page.icons.Icon.Texture;
+import com.kodingkingdom.educraft.page.icons.Icon.Textures;
 
 public class GroupRemovePage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
@@ -22,7 +22,7 @@ public class GroupRemovePage extends CompositeBoxPage {
 					GroupRemovePage thisPage = GroupRemovePage.this;
 					thisPage.remove();}
 				, ()->{
-					return Icon.makeIcon(Texture.All).withName("All Groups").withCaption("All Groups").asIcon();});
+					return Icon.makeIcon(Textures.All).withName("All Groups").withCaption("All Groups").asIcon();});
 		this.compose(namePage.makePageConnector(this.getSubBox(0, 0, 0, getHeight()-1)));
 		this.compose(controlsPage.makePageConnector(this.getSubBox(1, getHeight()-1, getWidth()-1, getHeight()-1)));
 		this.compose(contentPage.makePageConnector(this.getSubBox(1, 0, getWidth()-1, getHeight()-2)));}}

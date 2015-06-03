@@ -1,6 +1,10 @@
 package com.kodingkingdom.educraft.page.icons;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,7 +16,10 @@ import java.util.stream.Stream;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.kodingkingdom.educraft.EduCraftPlugin;
 import com.kodingkingdom.educraft.group.User;
@@ -41,7 +48,8 @@ public class Icon {;
 		iconStack.setItemMeta(iconInfo);
 		return this;}
 	private Icon withUser(User user){
-		SkullMeta iconInfo = (SkullMeta)iconStack.getItemMeta();
+		withTexture(getTexture(user), user.getId());
+		/*SkullMeta iconInfo = (SkullMeta)iconStack.getItemMeta();
 
 		EduCraftPlugin.debug("user is "+user);
 		EduCraftPlugin.debug("user id is "+user.getId());
@@ -49,7 +57,7 @@ public class Icon {;
 		
 		iconInfo.setOwner(user.getName());
 		
-		iconStack.setItemMeta(iconInfo);
+		iconStack.setItemMeta(iconInfo);*/
 		return this;}
 	private Icon withTexture(Texture texture){
 		return withTexture(texture, UUID.randomUUID());}
@@ -85,13 +93,13 @@ public class Icon {;
 		//EduCraftPlugin.debug("icon out of "+name);
 		if (name.equals("")) return Null;
 		try {
-			return makeIcon(Texture.valueOf(getTextureName(name))).withName(name).withCaption(name);} 
+			return makeIcon(Textures.valueOf(getTextureName(name)).texture).withName(name).withCaption(name);} 
 		catch(Exception e){
 			return makeIcon(Material.ENCHANTED_BOOK).withName(name).withCaption(name);}}
 	
 	private static String getTextureName(String name){
 		
-		if (Stream.of(Texture.values())
+		if (Stream.of(Textures.values())
 				.map(texture->texture.name())
 				.collect(Collectors.toCollection(HashSet::new))
 				.contains(name)) return name;
@@ -110,6 +118,8 @@ public class Icon {;
 		return makeIcon(Material.SKULL_ITEM,(short)3);}
 	public static Icon makeIcon(Texture texture){
 		return makeTexturedIcon().withTexture(texture);}
+	public static Icon makeIcon(Textures textures){
+		return makeTexturedIcon().withTexture(textures.texture);}
 
 	private static HashMap<UUID,Icon> userIconMap=new HashMap<UUID,Icon> ();
 	private static Icon makeIcon(ItemStack IconStack){
@@ -127,7 +137,7 @@ public class Icon {;
 	public static Icon makeIcon(Material material, short magicValue){
 		return makeIcon(new ItemStack(material, 1, magicValue));}
 	
-	public enum Texture{
+	public enum Textures{
 		ArrowUp("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDQ4Yjc2OGM2MjM0MzJkZmIyNTlmYjNjMzk3OGU5OGRlYzExMWY3OWRiZDZjZDg4ZjIxMTU1Mzc0YjcwYjNjIn19fQ==")
 		,ArrowDown("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmRhZGQ3NTVkMDg1MzczNTJiZjdhOTNlM2JiN2RkNGQ3MzMxMjFkMzlmMmZiNjcwNzNjZDQ3MWY1NjExOTRkZCJ9fX0=")
 		,ArrowRight("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWI2ZjFhMjViNmJjMTk5OTQ2NDcyYWVkYjM3MDUyMjU4NGZmNmY0ZTgzMjIxZTU5NDZiZDJlNDFiNWNhMTNiIn19fQ==")
@@ -211,9 +221,39 @@ public class Icon {;
 		,Teleport("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2E1OWJiMGE3YTMyOTY1YjNkOTBkOGVhZmE4OTlkMTgzNWY0MjQ1MDllYWRkNGU2YjcwOWFkYTUwYjljZiJ9fX0=")
 		,Portal("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjBiZmMyNTc3ZjZlMjZjNmM2ZjczNjVjMmM0MDc2YmNjZWU2NTMxMjQ5ODkzODJjZTkzYmNhNGZjOWUzOWIifX19")
 		;
+		Texture texture;;
+		private Textures(String Data){
+			texture = new Icon().new Texture(Data);}}
+	public class Texture{
 		String data;
 		private Texture(String Data){
-			data=Data;}}	
+			data=Data;}}
+	
+	 
+	private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
+    private static final JSONParser jsonParser = new JSONParser();
+ 
+    public static Texture getTexture(User user) {
+        try {
+        	HttpURLConnection connection;
+			connection = (HttpURLConnection) new URL(PROFILE_URL+user.getId().toString().replace("-", "")).openConnection();
+            JSONObject response = (JSONObject) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
+            JSONArray gameProfileArray = (JSONArray) response.get("properties");
+            JSONObject gameProfile = (JSONObject) gameProfileArray.get(0);
+            String texture = (String) gameProfile.get("value");
+            String cause = (String) response.get("cause");
+            String errorMessage = (String) response.get("errorMessage");
+            if (cause != null && cause.length() > 0) {
+                throw new IllegalStateException(errorMessage);}
+            return new Icon().new Texture(texture);}
+        catch (IOException e) {
+        	if (e.getMessage()!=null&&e.getMessage().contains("HTTP response code: 429"))
+        		return getTexture(user);
+        	else 
+    			return null;}
+        catch (ParseException e) {
+			return null;}}	
+	
 	private static GameProfile makeGameProfile(Texture texture,UUID id){
 		GameProfile profile=new GameProfile(id,null);
 		PropertyMap propertyMap=profile.getProperties();

@@ -5,18 +5,20 @@ import java.util.function.Consumer;
 import com.kodingkingdom.educraft.group.Group;
 import com.kodingkingdom.educraft.menu.Bible;
 import com.kodingkingdom.educraft.page.icons.Icon;
+import com.kodingkingdom.educraft.page.icons.Icon.Textures;
 import com.kodingkingdom.educraft.page.select.SelectItem;
 import com.kodingkingdom.educraft.page.select.selects.SelectFunctionSortedPage;
+import com.kodingkingdom.educraft.resources.Plot;
 
-public class PlotsContentPage extends SelectFunctionSortedPage<Group>{
+public class PlotsContentPage extends SelectFunctionSortedPage<Plot>{
 
-	public PlotsContentPage(Consumer<Group> GroupAction) {
+	public PlotsContentPage(Group Group, Consumer<Plot> PlotAction) {
 		super(
 			()->{
-				return Group.getGroups();}
-			,(Group group)->{
+				return Group.getPlots();}
+			,plot->{
 				return new SelectItem(
 						()->{
-							GroupAction.accept(group);}
-						,Icon.makeIcon(group.getName()).asIcon());}
+							PlotAction.accept(plot);}
+						,Icon.makeIcon(Textures.Plots).withCaption(plot.getName()).withName(plot.getName()).asIcon());}
 			, Bible.pollInterval);}}

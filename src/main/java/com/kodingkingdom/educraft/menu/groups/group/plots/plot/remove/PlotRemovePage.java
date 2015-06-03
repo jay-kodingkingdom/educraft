@@ -4,26 +4,26 @@ import com.kodingkingdom.educraft.menu.menus.ControlsPage;
 import com.kodingkingdom.educraft.menu.menus.NamePage;
 import com.kodingkingdom.educraft.page.CompositeBoxPage;
 import com.kodingkingdom.educraft.page.icons.Icon;
-import com.kodingkingdom.educraft.page.icons.Icon.Texture;
-import com.kodingkingdom.educraft.powers.Power;
+import com.kodingkingdom.educraft.page.icons.Icon.Textures;
+import com.kodingkingdom.educraft.resources.Plot;
 
-public class PowerRemovePage extends CompositeBoxPage {
-	Power power;
+public class PlotRemovePage extends CompositeBoxPage {
+	Plot plot;
 	
-	public PowerRemovePage(Power Power){
-		power=Power;}
+	public PlotRemovePage(Plot Plot){
+		plot=Plot;}
 	protected void compositeAttachedAction(Connector connector){
-		NamePage namePage = new NamePage(power.getName(), getHeight());
+		NamePage namePage = new NamePage(plot.getName(), getHeight());
 		ControlsPage controlsPage = new ControlsPage(
 				null , null
 				,  ()->{
-					PowerRemovePage thisPage = PowerRemovePage.this;
+					PlotRemovePage thisPage = PlotRemovePage.this;
 					thisPage.remove();}
 				, null, null, null, null, null);
-		PowerRemoveContentPage contentPage = new PowerRemoveContentPage(
-				power
+		PlotRemoveContentPage contentPage = new PlotRemoveContentPage(
+				plot
 				, ()->{
-					return Icon.makeIcon(Texture.Powers).withName("All Powered Users").withCaption("All Locked Users").asIcon();});
+					return Icon.makeIcon(Textures.All).withName("All Plots").withCaption("All Plots").asIcon();});
 		this.compose(namePage.makePageConnector(this.getSubBox(0, 0, 0, getHeight()-1)));
 		this.compose(controlsPage.makePageConnector(this.getSubBox(1, getHeight()-1, getWidth()-1, getHeight()-1)));
 		this.compose(contentPage.makePageConnector(this.getSubBox(1, 0, getWidth()-1, getHeight()-2)));}}

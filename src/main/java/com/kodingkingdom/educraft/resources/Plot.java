@@ -3,6 +3,7 @@ package com.kodingkingdom.educraft.resources;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,10 +23,11 @@ import com.worldcretornica.plotme.SqlManager;
 public class Plot implements Comparable<Plot>{
 	private static MultiverseCore multiverseCore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
 	
-	private static HashSet<Plot> plots;
+	private static HashSet<Plot> plots =new HashSet<Plot>();//;
 	
 	private String name;
-	
+	public String getName(){
+		return name;}
 
 	
 		
@@ -58,8 +60,12 @@ public class Plot implements Comparable<Plot>{
 		
 	
 	
-	private HashMap<Student, HashSet<PlotItem>> studentPlotsMap;
-
+	private HashMap<Student, HashSet<PlotItem>> studentPlotsMap=new HashMap<Student, HashSet<PlotItem>> ();
+	public HashSet<PlotItem> getPlots(){
+		return studentPlotsMap.values().stream()
+				.flatMap(plots->plots.stream())
+				.collect(Collectors.toCollection(HashSet::new));}
+	
 	public final PlotItem givePlot(Student student){
 		return givePlot(new Student[]{student})[0];}
 	public final PlotItem[] givePlot(Student... students){
@@ -116,7 +122,7 @@ getPlot:
 			studentPlotsMap.get(plotItem.getStudent()).remove(plotItem);}}	
 	
 	
-	public class PlotItem{
+	public class PlotItem implements Comparable<PlotItem>{
 		String plotId;
 		Student plotStudent;
 		LocationTeleportPower plotTeleporter=null;
@@ -142,10 +148,16 @@ getPlot:
 				com.worldcretornica.plotme.Plot plot = PlotManager.getPlotById(Plot.this.name, plotId);
 				plotTeleporter = new LocationTeleportPower(new Location(MV, PlotManager.bottomX(plot.id, MV) + (PlotManager.topX(plot.id, MV) - PlotManager.bottomX(plot.id, MV))/2, pmi.RoadHeight + 2, PlotManager.bottomZ(plot.id, MV) - 2));}
 			return plotTeleporter;}
+		public String getId(){
+			return plotId;}
 		public Student getStudent(){
 			return plotStudent;}
 		public Plot getPlot(){
-			return Plot.this;}}
+			return Plot.this;}
+
+		@Override
+		public int compareTo(PlotItem o) {
+			return plotId.compareTo(o.plotId);}}
 
 	@Override
 	public int compareTo(Plot o) {

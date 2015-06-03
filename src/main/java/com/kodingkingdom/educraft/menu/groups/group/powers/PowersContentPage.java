@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import com.kodingkingdom.educraft.group.Group;
 import com.kodingkingdom.educraft.menu.Bible;
 import com.kodingkingdom.educraft.page.icons.Icon;
-import com.kodingkingdom.educraft.page.icons.Icon.Texture;
+import com.kodingkingdom.educraft.page.icons.Icon.Textures;
 import com.kodingkingdom.educraft.page.select.SelectItem;
 import com.kodingkingdom.educraft.page.select.selects.SelectFunctionSortedPage;
 import com.kodingkingdom.educraft.powers.Power;
@@ -22,5 +22,5 @@ public class PowersContentPage extends SelectFunctionSortedPage<Power>{
 				return new SelectItem(
 						()->{
 							LockAction.accept(power);}
-						,Icon.makeIcon(Texture.Powers).withName(power.getName()).withCaption(power.getName()).asIcon());}
+						,Icon.makeIcon(Textures.Powers).withName(power.getName()).withCaption(power.getName()).asIcon());}
 			, Bible.pollInterval);}}
