@@ -1,14 +1,17 @@
 package com.kodingkingdom.educraft.menu.menus;
 
 import com.kodingkingdom.educraft.page.icons.Icon;
+import com.kodingkingdom.educraft.page.icons.Icon.Textures;
 import com.kodingkingdom.educraft.page.select.SelectItem;
 import com.kodingkingdom.educraft.page.select.selects.SelectItemsPage;
 
 public class ControlsPage extends SelectItemsPage{
 
 	private static Icon[] controlsIcons = new Icon[]
-			{Icon.makeIcon("+"),Icon.makeIcon("2"),Icon.makeIcon("3"),Icon.makeIcon("4"),Icon.makeIcon("5"),Icon.makeIcon("6"),Icon.makeIcon("7"),Icon.makeIcon("8")};
-	
+			{Icon.makeIcon(Textures.Back),Icon.makeIcon(Textures.Question),Icon.makeIcon(Textures.Add),Icon.makeIcon(Textures.Remove),Icon.makeIcon(Textures.No),Icon.makeIcon(Textures.Prev),Icon.makeIcon(Textures.Next),Icon.makeIcon(Textures.OK)};
+	private static String[] controlsCaptions = new String[]
+			{"Up","Question","Add","Remove","No","Back","Next","OK"};
+			
 	private static SelectItem[][] makeSelectItems(Runnable[] controlsActions){
 		SelectItem[][] selectItems = new SelectItem[1][controlsActions.length];
 		for (int widthX=0;widthX<controlsActions.length;widthX++){
@@ -16,8 +19,21 @@ public class ControlsPage extends SelectItemsPage{
 			else selectItems[0][widthX]=
 					new SelectItem(
 						controlsActions[widthX]
-						,controlsIcons[widthX].asIcon());}
+						,controlsIcons[widthX]
+								.withName(controlsCaptions[widthX]).withCaption(controlsCaptions[widthX]).asIcon());}
 		return selectItems;}
-	
+	private static SelectItem[][] makeSelectItems(ControlsItem[] controlsItems){
+		SelectItem[][] selectItems = new SelectItem[1][controlsItems.length];
+		for (int widthX=0;widthX<controlsItems.length;widthX++){
+			if (controlsItems[widthX]==null) selectItems[0][widthX]=SelectItem.Null;
+			else selectItems[0][widthX]=
+					new SelectItem(
+						controlsItems[widthX].controlsAction
+						,controlsIcons[widthX].withName(controlsItems[widthX].controlsCaption)
+												.withCaption(controlsItems[widthX].controlsCaption).asIcon());}
+		return selectItems;}
+
 	public ControlsPage(Runnable... controlsActions) {
-		super(makeSelectItems(controlsActions));}}
+		super(makeSelectItems(controlsActions));}
+	public ControlsPage(ControlsItem... controlsItems) {
+		super(makeSelectItems(controlsItems));}}

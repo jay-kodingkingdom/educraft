@@ -1,10 +1,13 @@
 
 package com.kodingkingdom.educraft.menu.groups.group.plots.add;
 
+import org.bukkit.entity.Player;
+
 import com.kodingkingdom.educraft.group.Group;
 import com.kodingkingdom.educraft.menu.menus.ControlsPage;
 import com.kodingkingdom.educraft.menu.menus.VaryNamePage;
 import com.kodingkingdom.educraft.page.CompositeBoxPage;
+import com.kodingkingdom.educraft.page.Menu;
 import com.kodingkingdom.educraft.resources.Plot;
 ;
 
@@ -17,16 +20,28 @@ public class PlotsAddPage extends CompositeBoxPage {
 		VaryNamePage namePage = new VaryNamePage(()->{return plotName;}, getHeight());
 		ControlsPage controlsPage = new ControlsPage(
 				()->{
-					plotName=(!plotName.equals("")?plotName.substring(0, plotName.length()-1):"");}
+					PlotsAddPage thisPage = PlotsAddPage.this;
+					thisPage.remove();}
+				, null, null, null, null
 				, ()->{
-					group.addPlots(
-						Plot.createPlot(plotName));
+					plotName=(!plotName.equals("")?plotName.substring(0, plotName.length()-1):"");}
+				, null
+				, ()->{
 					PlotsAddPage thisPage = PlotsAddPage.this;
-					thisPage.remove();}
-				,  ()->{
-					PlotsAddPage thisPage = PlotsAddPage.this;
-					thisPage.remove();}
-				, null, null, null, null, null);
+					if (!plotName.equals("") &&
+							!Plot.getPlots().stream()
+							.anyMatch(
+									(Plot plot) -> {
+										return plotName.equals(plot.getName());})){
+						
+						Player player = Menu.getMenu(thisPage).getUser().getPlayer();
+						group.addPlots(
+								Plot.createPlot(plotName));
+						player.sendMessage("Plot "+plotName+" has been created!");
+						thisPage.remove();}
+					else {
+						Player player = Menu.getMenu(thisPage).getUser().getPlayer();
+						player.sendMessage("Plot "+plotName+" already exists!");}});
 		PlotsAddContentPage contentPage = new PlotsAddContentPage(
 				letter->{
 					String newGroupName = plotName + letter;

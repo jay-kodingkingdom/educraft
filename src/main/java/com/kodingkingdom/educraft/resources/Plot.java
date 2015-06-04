@@ -1,16 +1,26 @@
 package com.kodingkingdom.educraft.resources;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.kodingkingdom.craftercoordinator.CrafterRegion;
 import com.kodingkingdom.educraft.group.users.Student;
@@ -18,31 +28,151 @@ import com.kodingkingdom.educraft.powers.powers.LocationTeleportPower;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.worldcretornica.plotme.PlotManager;
 import com.worldcretornica.plotme.PlotMapInfo;
+import com.worldcretornica.plotme.PlotMe;
 import com.worldcretornica.plotme.SqlManager;
 
 public class Plot implements Comparable<Plot>{
 	private static MultiverseCore multiverseCore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
+	private static PlotMe plotMe = (PlotMe) Bukkit.getServer().getPluginManager().getPlugin("PlotMe");
 	
-	private static HashSet<Plot> plots =new HashSet<Plot>();//;
+	private static HashMap<String, Plot> plots =new HashMap<String, Plot>();//;
 	
 	private String name;
 	public String getName(){
 		return name;}
 
-	
+	public static HashSet<Plot> getPlots(){
+		return new HashSet<Plot> (plots.values());}	
 		
 	public static Plot createPlot(String Name){
+
+		if (plots.containsKey(Name)) throw new RuntimeException();
+		
 		Plot plot = new Plot();
 		
 		plot.name=Name;
 
 		if (! multiverseCore.getMVWorldManager().addWorld(Name,Environment.NORMAL,"",WorldType.FLAT,false,"PlotMe",false))
 				throw new RuntimeException();
+
+		if(!plotMe.getDataFolder().exists())
+			plotMe.getDataFolder().mkdirs();
+				
+		File configfile = new File(plotMe.getDataFolder().getAbsolutePath(), "config.yml");
 		
-		plots.add(plot);
+		FileConfiguration config = new YamlConfiguration();
+		
+		try {
+			config.load(configfile);}
+		
+		catch (FileNotFoundException e) {}
+		catch (IOException e){
+			throw new RuntimeException();} 
+		catch (InvalidConfigurationException e){
+			throw new RuntimeException();}
+
+		ConfigurationSection worlds;
+		
+		if(!config.contains("worlds"))
+			worlds = config.createSection("worlds");
+		else
+			worlds = config.getConfigurationSection("worlds");
+
+		List<Integer> defaultProtectedBlocks = new ArrayList<Integer>();
+		List<String> defaultPreventedBlocks = new ArrayList<String>();
+		
+		defaultProtectedBlocks.add(Material.CHEST.getId());
+		defaultProtectedBlocks.add(Material.FURNACE.getId());
+		defaultProtectedBlocks.add(Material.BURNING_FURNACE.getId());
+		defaultProtectedBlocks.add(Material.ENDER_PORTAL_FRAME.getId());
+		defaultProtectedBlocks.add(Material.DIODE_BLOCK_ON.getId());
+		defaultProtectedBlocks.add(Material.DIODE_BLOCK_OFF.getId());
+		defaultProtectedBlocks.add(Material.JUKEBOX.getId());
+		defaultProtectedBlocks.add(Material.NOTE_BLOCK.getId());
+		defaultProtectedBlocks.add(Material.BED.getId());
+		defaultProtectedBlocks.add(Material.CAULDRON.getId());
+		defaultProtectedBlocks.add(Material.BREWING_STAND.getId());
+		defaultProtectedBlocks.add(Material.BEACON.getId());
+		defaultProtectedBlocks.add(Material.FLOWER_POT.getId());
+		defaultProtectedBlocks.add(Material.ANVIL.getId());
+		defaultProtectedBlocks.add(Material.DISPENSER.getId());
+		defaultProtectedBlocks.add(Material.DROPPER.getId());
+		defaultProtectedBlocks.add(Material.HOPPER.getId());
+		
+		defaultPreventedBlocks.add("" + Material.INK_SACK.getId() + ":15");
+		defaultPreventedBlocks.add("" + Material.FLINT_AND_STEEL.getId());
+		defaultPreventedBlocks.add("" + Material.MINECART.getId());
+		defaultPreventedBlocks.add("" + Material.POWERED_MINECART.getId());
+		defaultPreventedBlocks.add("" + Material.STORAGE_MINECART.getId());
+		defaultPreventedBlocks.add("" + Material.HOPPER_MINECART.getId());
+		defaultPreventedBlocks.add("" + Material.BOAT.getId());
+		
+		ConfigurationSection plotworld = worlds.createSection(plot.name);
+		
+		plotworld.set("PlotAutoLimit", 1000);
+		plotworld.set("PathWidth", 7);
+		plotworld.set("PlotSize", 32);
+		
+		plotworld.set("BottomBlockId", "7");
+		plotworld.set("WallBlockId", "44");
+		plotworld.set("PlotFloorBlockId", "2");
+		plotworld.set("PlotFillingBlockId", "3");
+		plotworld.set("RoadMainBlockId", "5");
+		plotworld.set("RoadStripeBlockId", "5:2");
+		
+		plotworld.set("RoadHeight", 64);
+		plotworld.set("DaysToExpiration", 7);
+		plotworld.set("ProtectedBlocks", defaultProtectedBlocks);
+		plotworld.set("PreventedItems", defaultPreventedBlocks);
+		plotworld.set("ProtectedWallBlockId", "44:4");
+		plotworld.set("ForSaleWallBlockId", "44:1");
+		plotworld.set("AuctionWallBlockId", "44:1");
+		plotworld.set("AutoLinkPlots", true);
+		plotworld.set("DisableExplosion", true);
+		plotworld.set("DisableIgnition", true);
+		
+		ConfigurationSection economysection = plotworld.createSection("economy");
+		
+		economysection.set("UseEconomy", false);
+		economysection.set("CanPutOnSale", false);
+		economysection.set("CanSellToBank", false);
+		economysection.set("RefundClaimPriceOnReset", false);
+		economysection.set("RefundClaimPriceOnSetOwner", false);
+		economysection.set("ClaimPrice", 0);
+		economysection.set("ClearPrice", 0);
+		economysection.set("AddPlayerPrice", 0);
+		economysection.set("DenyPlayerPrice", 0);
+		economysection.set("RemovePlayerPrice", 0);
+		economysection.set("UndenyPlayerPrice", 0);
+		economysection.set("PlotHomePrice", 0);
+		economysection.set("CanCustomizeSellPrice", false);
+		economysection.set("SellToPlayerPrice", 0);
+		economysection.set("SellToBankPrice", 0);
+		economysection.set("BuyFromBankPrice", 0);
+		economysection.set("AddCommentPrice", 0);
+		economysection.set("BiomeChangePrice", 0);
+		economysection.set("ProtectPrice", 0);
+		economysection.set("DisposePrice", 0);
+		
+		plotworld.set("economy", economysection);
+		
+		worlds.set("plotworld", plotworld);
+		config.set("worlds", worlds);
+		
+
+		try{
+			config.save(configfile);} 
+		catch (IOException e){
+			throw new RuntimeException();}
+		
+		plotMe.initialize();
+		
+		plots.put(Name,plot);
 		
 		return plot;}
 	public static Plot copyPlot(Plot plot, String Name){
+		if (plots.containsKey(Name)) throw new RuntimeException();
+		
 		Plot newPlot  = new Plot();
 		
 		newPlot.name=Name;
@@ -50,7 +180,7 @@ public class Plot implements Comparable<Plot>{
 		if (! multiverseCore.getMVWorldManager().cloneWorld(newPlot.name, Name, "PlotMe"))
 				throw new RuntimeException();
 		
-		plots.add(newPlot);
+		plots.put(Name, newPlot);
 		
 		return newPlot;}
 	public static void deletePlot(Plot plot){
@@ -61,7 +191,7 @@ public class Plot implements Comparable<Plot>{
 	
 	
 	private HashMap<Student, HashSet<PlotItem>> studentPlotsMap=new HashMap<Student, HashSet<PlotItem>> ();
-	public HashSet<PlotItem> getPlots(){
+	public HashSet<PlotItem> getPlotItems(){
 		return studentPlotsMap.values().stream()
 				.flatMap(plots->plots.stream())
 				.collect(Collectors.toCollection(HashSet::new));}
@@ -96,6 +226,7 @@ getPlot:
 							
 							plotItems[j]=plotItem;
 							
+							if (studentPlotsMap.get(students[j])==null) studentPlotsMap.put(students[j], new HashSet<PlotItem>());
 							studentPlotsMap.get(students[j]).add(plotItem);
 							
 							break getPlot;}}}}}
@@ -112,7 +243,7 @@ getPlot:
 			PlotManager.setBiome(plotMV, id, plot, Biome.PLAINS);
 			PlotManager.clear(plotMV, plot);
 
-			PlotManager.getPlots(plotItem.getStudent().getName()).remove(id);
+			PlotManager.getPlots(plotItem.getStudent().getPlayer()).remove(id);
 
 			PlotManager.removeOwnerSign(plotMV, id);
 			PlotManager.removeSellSign(plotMV, id);

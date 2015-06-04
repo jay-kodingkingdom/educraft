@@ -22,18 +22,17 @@ public class PowersAddPage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
 		NamePage namePage = new NamePage("Powers", getHeight());
 		ControlsPage controlsPage = new ControlsPage(
-				null, null
-				,  ()->{
+				()->{
 					PowersAddPage thisPage = PowersAddPage.this;
 					thisPage.remove();}
-				, null, null, null, null, null);
+				, null, null, null, null, null, null, null);
 		PowersAddContentPage contentPage = new PowersAddContentPage(
 				getWidth()-1
 				, getHeight()-1
 				, new SelectItem(
 						()->{
 							PowersAddPage thisPage = PowersAddPage.this;
-							Player player = Menu.getMenu(PowersAddPage.this).getUser().getPlayer();
+							Player player = Menu.getMenu(thisPage).getUser().getPlayer();
 							if (player!=null) {
 								group.addPowers(new LocationTeleportPower(player.getLocation()));
 								player.sendMessage("LocationTeleportPower has been created on your current location");}}

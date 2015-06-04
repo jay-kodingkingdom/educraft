@@ -12,11 +12,10 @@ public class TasksPage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
 		NamePage namePage = new NamePage(group.getName(), getHeight());
 		ControlsPage controlsPage = new ControlsPage(
-				null
-				, ()->{
+				()->{
 					TasksPage thisPage = TasksPage.this; 
 					thisPage.remove();}
-				, null, null, null, null, null, null);
+				, null, null, null, null, null, null, null);
 		TasksContentPage contentPage = new TasksContentPage(
 				group
 				,task->{});

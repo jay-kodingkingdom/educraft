@@ -24,11 +24,10 @@ public class GroupPage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
 		NamePage namePage = new NamePage(group.getName(), getHeight());
 		ControlsPage controlsPage = new ControlsPage(
-				null, null
-				,  ()->{
+				()->{
 					GroupPage thisPage = GroupPage.this;
 					thisPage.remove();}
-				, null, null, null, null, null);
+				, null, null , null, null, null, null, null);
 		GroupContentPage contentPage = new GroupContentPage(getWidth()-1, getHeight()-1
 											,new SelectItem(
 													()->{
@@ -57,7 +56,7 @@ public class GroupPage extends CompositeBoxPage {
 											,new SelectItem(
 													()->{
 														GroupPage thisPage = GroupPage.this; 
-														WorldsPage newPage = new WorldsPage();
+														WorldsPage newPage = new WorldsPage(group);
 														thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
 													,Icon.makeIcon("Worlds").asIcon())
 											,new SelectItem(

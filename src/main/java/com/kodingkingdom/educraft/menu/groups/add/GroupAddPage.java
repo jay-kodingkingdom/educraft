@@ -1,11 +1,14 @@
 
 package com.kodingkingdom.educraft.menu.groups.add;
 
+import org.bukkit.entity.Player;
+
 import com.kodingkingdom.educraft.group.Group;
 import com.kodingkingdom.educraft.menu.groups.add.GroupAddContentPage;
 import com.kodingkingdom.educraft.menu.menus.ControlsPage;
 import com.kodingkingdom.educraft.menu.menus.VaryNamePage;
 import com.kodingkingdom.educraft.page.CompositeBoxPage;
+import com.kodingkingdom.educraft.page.Menu;
 
 public class GroupAddPage extends CompositeBoxPage {
 	String groupName="";
@@ -13,15 +16,26 @@ public class GroupAddPage extends CompositeBoxPage {
 		VaryNamePage namePage = new VaryNamePage(()->{return groupName;}, getHeight());
 		ControlsPage controlsPage = new ControlsPage(
 				()->{
-					groupName=(!groupName.equals("")?groupName.substring(0, groupName.length()-1):"");}
-				, ()->{
-					Group.create(groupName);
 					GroupAddPage thisPage = GroupAddPage.this;
 					thisPage.remove();}
+				, null, null, null, null
 				,  ()->{
+					groupName=(!groupName.equals("")?groupName.substring(0, groupName.length()-1):"");}, null
+				, ()->{
 					GroupAddPage thisPage = GroupAddPage.this;
-					thisPage.remove();}
-				, null, null, null, null, null);
+					if (!groupName.equals("") &&
+							!Group.getGroups().stream()
+							.anyMatch(
+									(Group group) -> {
+										return groupName.equals(group.getName());})){
+						
+						Group.create(groupName);
+						Player player = Menu.getMenu(thisPage).getUser().getPlayer();
+						player.sendMessage("Group "+groupName+" has been created!");
+						thisPage.remove();}
+					else {
+						Player player = Menu.getMenu(thisPage).getUser().getPlayer();
+						player.sendMessage("Group "+groupName+" already exists!");}});
 		GroupAddContentPage contentPage = new GroupAddContentPage(
 				letter->{
 					String newGroupName = groupName + letter;

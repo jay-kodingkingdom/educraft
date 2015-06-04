@@ -18,11 +18,10 @@ public class PlayerTeleportPowerAddPage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
 		NamePage namePage = new NamePage("PlayerTeleportPower", getHeight());
 		ControlsPage controlsPage = new ControlsPage(
-				null, null
-				,  ()->{
+				()->{
 					PlayerTeleportPowerAddPage thisPage = PlayerTeleportPowerAddPage.this;
 					thisPage.remove();}
-				, null, null, null, null, null);
+				, null, null, null, null, null, null, null);
 		PlayerTeleportPowerAddContentPage contentPage = new PlayerTeleportPowerAddContentPage(
 				group
 				, student->{

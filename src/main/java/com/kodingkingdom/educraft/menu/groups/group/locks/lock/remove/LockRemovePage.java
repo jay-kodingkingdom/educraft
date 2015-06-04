@@ -15,11 +15,10 @@ public class LockRemovePage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
 		NamePage namePage = new NamePage(lock.getName(), getHeight());
 		ControlsPage controlsPage = new ControlsPage(
-				null , null
-				,  ()->{
+				()->{
 					LockRemovePage thisPage = LockRemovePage.this;
 					thisPage.remove();}
-				, null, null, null, null, null);
+				, null , null, null, null, null, null, null);
 		LockRemoveContentPage contentPage = new LockRemoveContentPage(
 				lock,
 				student->{

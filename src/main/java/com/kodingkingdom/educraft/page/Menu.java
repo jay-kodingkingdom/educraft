@@ -92,7 +92,7 @@ public class Menu extends CompositeBoxPage implements Listener{
 	public void clickMenu(InventoryClickEvent e){
 		if (menuMenu.equals(e.getClickedInventory())){
 			e.setCancelled(true);
-			clickItem(normalize(itemMap.get(e.getRawSlot())));}}
+			EduCraftPlugin.getPlugin().getEduCraft().scheduleTask(()->clickItem(normalize(itemMap.get(e.getRawSlot()))), 0);}}
 	//@EventHandler(priority=EventPriority.MONITOR)
 	public void closeMenu(InventoryCloseEvent e){
 		if (e.getInventory().equals(menuMenu)){

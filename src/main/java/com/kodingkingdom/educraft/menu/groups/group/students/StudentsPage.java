@@ -16,16 +16,17 @@ public class StudentsPage extends CompositeBoxPage {
 		ControlsPage controlsPage = new ControlsPage(
 				()->{
 					StudentsPage thisPage = StudentsPage.this; 
+					thisPage.remove();}
+				, null
+				, ()->{
+					StudentsPage thisPage = StudentsPage.this; 
 					StudentAddPage newPage = new StudentAddPage(group);
 					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
 				, ()->{
 					StudentsPage thisPage = StudentsPage.this; 
 					StudentRemovePage newPage = new StudentRemovePage(group);
 					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
-				, ()->{
-					StudentsPage thisPage = StudentsPage.this; 
-					thisPage.remove();}
-				, null, null, null, null, null);
+				, null, null, null, null);
 		StudentsContentPage contentPage = new StudentsContentPage(
 				group,
 				student->{});

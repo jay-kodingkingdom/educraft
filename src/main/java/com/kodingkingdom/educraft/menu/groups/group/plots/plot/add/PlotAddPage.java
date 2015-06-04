@@ -19,11 +19,10 @@ public class PlotAddPage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
 		NamePage namePage = new NamePage(plot.getName(), getHeight());
 		ControlsPage controlsPage = new ControlsPage(
-				null, null
-				,  ()->{
+				()->{
 					PlotAddPage thisPage = PlotAddPage.this;
 					thisPage.remove();}
-				, null, null, null, null, null);
+				, null, null, null, null, null, null, null);
 		PlotAddContentPage contentPage = new PlotAddContentPage(
 				group
 				,plot

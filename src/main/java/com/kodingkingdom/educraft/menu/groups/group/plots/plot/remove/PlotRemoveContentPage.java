@@ -4,7 +4,6 @@ import java.util.function.Supplier;
 
 import org.bukkit.inventory.ItemStack;
 
-import com.kodingkingdom.educraft.group.Group;
 import com.kodingkingdom.educraft.menu.Bible;
 import com.kodingkingdom.educraft.page.icons.Icon;
 import com.kodingkingdom.educraft.page.icons.Icon.Textures;
@@ -18,7 +17,7 @@ public class PlotRemoveContentPage extends SelectFunctionSortedAllPage<PlotItem>
 	public PlotRemoveContentPage(Plot Plot, Supplier<ItemStack> PlotsIcon) {
 		super(
 			()->{
-				return Plot.getPlots();}
+				return Plot.getPlotItems();}
 			,plotItem->{
 				return new SelectItem(
 						()->{

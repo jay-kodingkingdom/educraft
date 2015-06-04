@@ -11,6 +11,7 @@ public class GroupsPage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
 		NamePage namePage = new NamePage("Groups", getHeight());
 		ControlsPage controlsPage = new ControlsPage(
+				null, null, 
 				()->{
 					GroupsPage thisPage = GroupsPage.this; 
 					GroupAddPage newPage = new GroupAddPage();
@@ -19,7 +20,7 @@ public class GroupsPage extends CompositeBoxPage {
 					GroupsPage thisPage = GroupsPage.this; 
 					GroupRemovePage newPage = new GroupRemovePage();
 					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
-				, null, null, null, null, null, null);
+				, null, null, null, null);
 		GroupsContentPage contentPage = new GroupsContentPage(
 				group->{
 					GroupsPage thisPage = GroupsPage.this;

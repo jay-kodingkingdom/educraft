@@ -20,16 +20,17 @@ public class PlotPage extends CompositeBoxPage {
 		ControlsPage controlsPage = new ControlsPage(
 				()->{
 					PlotPage thisPage = PlotPage.this; 
+					thisPage.remove();}
+				, null
+				, ()->{
+					PlotPage thisPage = PlotPage.this; 
 					PlotAddPage newPage = new PlotAddPage(group, plot);
 					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
 				, ()->{
 					PlotPage thisPage = PlotPage.this; 
 					PlotRemovePage newPage = new PlotRemovePage (plot);
 					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
-				, ()->{
-					PlotPage thisPage = PlotPage.this; 
-					thisPage.remove();}
-				, null, null, null, null, null);
+				, null, null, null, null);
 		PlotContentPage contentPage = new PlotContentPage(
 				plot,
 				plotItem->{

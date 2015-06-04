@@ -10,7 +10,10 @@ import com.kodingkingdom.educraft.powers.Task;
 import com.kodingkingdom.educraft.powers.locks.FreezeLock;
 import com.kodingkingdom.educraft.powers.locks.MuteLock;
 import com.kodingkingdom.educraft.powers.locks.NoBuildLock;
+import com.kodingkingdom.educraft.powers.powers.GameModeCreativePower;
+import com.kodingkingdom.educraft.powers.powers.GameModeSurvivalPower;
 import com.kodingkingdom.educraft.powers.powers.SuperSpeedPower;
+import com.kodingkingdom.educraft.powers.powers.TimeLockPower;
 import com.kodingkingdom.educraft.resources.Plot;
 import com.kodingkingdom.educraft.resources.World;
 
@@ -90,6 +93,9 @@ public class Group implements Comparable<Group>{
 		group.locks.add(new MuteLock());
 		group.locks.add(new NoBuildLock());
 		group.powers.add(new SuperSpeedPower());
+		group.powers.add(new GameModeCreativePower());
+		group.powers.add(new GameModeSurvivalPower());
+		group.powers.add(new TimeLockPower());
 		//
 		groups.add(group);
 		return group;}

@@ -19,16 +19,17 @@ public class PowerPage extends CompositeBoxPage {
 		ControlsPage controlsPage = new ControlsPage(
 				()->{
 					PowerPage thisPage = PowerPage.this; 
+					thisPage.remove();}
+				, null
+				, ()->{
+					PowerPage thisPage = PowerPage.this; 
 					PowerAddPage newPage = new PowerAddPage(group, power);
 					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
 				, ()->{
 					PowerPage thisPage = PowerPage.this; 
 					PowerRemovePage newPage = new PowerRemovePage (power);
 					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
-				, ()->{
-					PowerPage thisPage = PowerPage.this; 
-					thisPage.remove();}
-				, null, null, null, null, null);
+				, null, null, null, null);
 		PowerContentPage contentPage = new PowerContentPage(
 				power,
 				power->{});

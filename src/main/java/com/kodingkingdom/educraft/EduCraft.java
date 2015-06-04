@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import com.kodingkingdom.educraft.group.users.Student;
 import com.kodingkingdom.educraft.group.users.Teacher;
 import com.kodingkingdom.educraft.menu.Bible;
 
@@ -29,6 +30,8 @@ public class EduCraft implements Listener, CommandExecutor{
 
 	public int scheduleAsyncTask(Runnable task){
 		return plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, task);}
+	public int scheduleAsyncTask(Runnable task, long delay){
+		return plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, task, delay);}
 	public int scheduleTask(Runnable task, long delay){
 		return plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, delay);}
 	public void cancelTask(int taskId){
@@ -36,6 +39,7 @@ public class EduCraft implements Listener, CommandExecutor{
 
 	@EventHandler
 	public void giveBible(PlayerJoinEvent e){
+		Student.getStudent(e.getPlayer().getUniqueId()); 
 		if (e.getPlayer().isOp()) {
 			giveBible(e.getPlayer());}}
 	
@@ -61,20 +65,20 @@ public class EduCraft implements Listener, CommandExecutor{
 			return false;}
 		
 		if (args.length==1){
-			if (args[0].equalsIgnoreCase("giveMenu")){ 
+			if (args[0].equalsIgnoreCase("bible")){ 
 				if (sender instanceof Player){
 					giveBible((Player)sender);
-					sender.sendMessage("Teacher menu given");
+					sender.sendMessage("Bible given");
 					return true;}
 				else {
 					sender.sendMessage("Please specify a player!");
 					return true;}}}
 		else if (args.length==2){
-			if (args[0].equalsIgnoreCase("giveMenu")){
+			if (args[0].equalsIgnoreCase("bible")){
 				Player player = Bukkit.getPlayer(args[1]);
 				if (player != null){
 					giveBible(player);
-					sender.sendMessage("Teacher menu given");
+					sender.sendMessage("Bible given");
 					return true;}
 				else {
 					sender.sendMessage("The player specified doesn't exist!");

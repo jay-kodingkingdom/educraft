@@ -19,16 +19,17 @@ public class LockPage extends CompositeBoxPage {
 		ControlsPage controlsPage = new ControlsPage(
 				()->{
 					LockPage thisPage = LockPage.this; 
+					thisPage.remove();}
+				, null
+				, ()->{
+					LockPage thisPage = LockPage.this; 
 					LockAddPage newPage = new LockAddPage(group, lock);
 					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
 				, ()->{
 					LockPage thisPage = LockPage.this; 
 					LockRemovePage newPage = new LockRemovePage(lock);
 					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
-				, ()->{
-					LockPage thisPage = LockPage.this; 
-					thisPage.remove();}
-				, null, null, null, null, null);
+				, null, null, null, null);
 		LockContentPage contentPage = new LockContentPage(
 				lock,
 				student->{});

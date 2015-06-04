@@ -21,6 +21,8 @@ public class PlotAddContentPage extends SelectFunctionSortedAllPage<Student>{
 			,student->{
 				return new SelectItem(
 						()->{
-								plot.givePlot(student);}
+								plot.givePlot(student)
+									.getTeleporter().give(student);
+								if (student.getPlayer()!=null) student.getPlayer().sendMessage("You have been given a new plot");}
 						,Icon.makeIcon(student).asIcon());}
 			, PlotsIcon, Bible.pollInterval);}}

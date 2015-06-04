@@ -17,6 +17,6 @@ public class TasksContentPage extends SelectFunctionSortedPage<Task>{
 				return new ArrayList<Task>();}
 			,(Task task)->{
 				return new SelectItem(
-						()->{;}
+						()->{TaskAction.accept(task);}
 						,null);}
 			, Bible.pollInterval);}}

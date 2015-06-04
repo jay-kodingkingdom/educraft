@@ -16,11 +16,10 @@ public class StudentAddPage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
 		NamePage namePage = new NamePage("Groups", getHeight());
 		ControlsPage controlsPage = new ControlsPage(
-				null, null
-				,  ()->{
+				()->{
 					StudentAddPage thisPage = StudentAddPage.this;
 					thisPage.remove();}
-				, null, null, null, null, null);
+				, null, null, null, null, null, null, null);
 		StudentAddContentPage contentPage = new StudentAddContentPage(
 				group
 				, ()->{

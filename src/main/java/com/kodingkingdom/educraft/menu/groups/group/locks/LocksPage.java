@@ -13,11 +13,10 @@ public class LocksPage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
 		NamePage namePage = new NamePage(group.getName(), getHeight());
 		ControlsPage controlsPage = new ControlsPage(
-				null
-				, ()->{
+				()->{
 					LocksPage thisPage = LocksPage.this; 
 					thisPage.remove();}
-				, null, null, null, null, null, null);
+				, null, null, null, null, null, null, null);
 		LocksContentPage contentPage = new LocksContentPage(
 				group
 				,lock->{

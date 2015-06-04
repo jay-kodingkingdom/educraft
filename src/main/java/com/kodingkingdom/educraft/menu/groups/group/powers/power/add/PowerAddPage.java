@@ -2,6 +2,7 @@
 package com.kodingkingdom.educraft.menu.groups.group.powers.power.add;
 
 import com.kodingkingdom.educraft.group.Group;
+import com.kodingkingdom.educraft.group.User;
 import com.kodingkingdom.educraft.menu.menus.ControlsPage;
 import com.kodingkingdom.educraft.menu.menus.NamePage;
 import com.kodingkingdom.educraft.page.CompositeBoxPage;
@@ -19,14 +20,16 @@ public class PowerAddPage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
 		NamePage namePage = new NamePage(power.getName(), getHeight());
 		ControlsPage controlsPage = new ControlsPage(
-				null, null
-				,  ()->{
+				()->{
 					PowerAddPage thisPage = PowerAddPage.this;
 					thisPage.remove();}
-				, null, null, null, null, null);
+				, null, null, null, null, null, null, null);
 		PowerAddContentPage contentPage = new PowerAddContentPage(
 				group
 				,power
+				, (User user)->{
+					return Icon.makeIcon(user).withName("Give "+power.getName()+" to "+user.getName())
+							.withCaption("Give "+power.getName()+" to "+user.getName()).asIcon();}
 				, ()->{
 					return Icon.makeIcon(Textures.Users).withName("All Group Users").withCaption("All Group Users").asIcon();});
 		this.compose(namePage.makePageConnector(this.getSubBox(0, 0, 0, getHeight()-1)));

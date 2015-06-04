@@ -15,11 +15,10 @@ public class PlotRemovePage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
 		NamePage namePage = new NamePage(plot.getName(), getHeight());
 		ControlsPage controlsPage = new ControlsPage(
-				null , null
-				,  ()->{
+				()->{
 					PlotRemovePage thisPage = PlotRemovePage.this;
 					thisPage.remove();}
-				, null, null, null, null, null);
+				, null , null, null, null, null, null, null);
 		PlotRemoveContentPage contentPage = new PlotRemoveContentPage(
 				plot
 				, ()->{

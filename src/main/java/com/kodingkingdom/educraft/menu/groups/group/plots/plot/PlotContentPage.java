@@ -15,7 +15,7 @@ public class PlotContentPage extends SelectFunctionSortedPage<PlotItem>{
 	public PlotContentPage(Plot plot, Consumer<PlotItem> PlotAction) {
 		super(
 			()->{
-				return plot.getPlots();}
+				return plot.getPlotItems();}
 			, plotItem->{
 				return new SelectItem(
 						()->{

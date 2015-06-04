@@ -10,7 +10,7 @@ public class LocationTeleportPower extends Power implements Listener{
 	Location location;
 	
 	public final String getName(){
-		return "TeleportToLocation:"+location.getBlockX()+","+location.getBlockY()+","+location.getBlockZ();}
+		return "TeleportToLocation:"+location.getWorld().getName()+","+location.getBlockX()+","+location.getBlockY()+","+location.getBlockZ();}
 	
 	//HashMap<PowerItem, Location> originalLocationMap = new HashMap<PowerItem, Location>(); 
 	public LocationTeleportPower(Location loc){

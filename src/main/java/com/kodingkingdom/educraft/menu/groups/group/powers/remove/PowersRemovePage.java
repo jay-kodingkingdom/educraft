@@ -15,11 +15,10 @@ public class PowersRemovePage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
 		NamePage namePage = new NamePage("Powers", getHeight());
 		ControlsPage controlsPage = new ControlsPage(
-				null , null
-				,  ()->{
+				()->{
 					PowersRemovePage thisPage = PowersRemovePage.this;
 					thisPage.remove();}
-				, null, null, null, null, null);
+				, null , null, null, null, null, null, null);
 		PowersRemoveContentPage contentPage = new PowersRemoveContentPage(
 				group
 				, ()->{

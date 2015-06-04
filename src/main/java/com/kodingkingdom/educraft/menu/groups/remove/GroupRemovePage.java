@@ -11,11 +11,10 @@ public class GroupRemovePage extends CompositeBoxPage {
 	protected void compositeAttachedAction(Connector connector){
 		NamePage namePage = new NamePage("Groups", getHeight());
 		ControlsPage controlsPage = new ControlsPage(
-				null , null
-				,  ()->{
+				()->{
 					GroupRemovePage thisPage = GroupRemovePage.this;
 					thisPage.remove();}
-				, null, null, null, null, null);
+				,null , null, null, null, null, null, null);
 		GroupRemoveContentPage contentPage = new GroupRemoveContentPage(
 				group->{
 					Group.delete(group);
