@@ -1,28 +1,33 @@
-package com.kodingkingdom.educraft.menu.groups.group.plots.plot.remove;
 
+package com.kodingkingdom.educraft.menu.groups.group.plotworlds.plot.add;
+
+import com.kodingkingdom.educraft.group.Group;
 import com.kodingkingdom.educraft.menu.menus.ControlsPage;
 import com.kodingkingdom.educraft.menu.menus.NamePage;
 import com.kodingkingdom.educraft.page.CompositeBoxPage;
 import com.kodingkingdom.educraft.page.icons.Icon;
 import com.kodingkingdom.educraft.page.icons.Icon.Textures;
-import com.kodingkingdom.educraft.resources.Plot;
+import com.kodingkingdom.educraft.resources.PlotWorld;
 
-public class PlotRemovePage extends CompositeBoxPage {
-	Plot plot;
+public class PlotAddPage extends CompositeBoxPage {
+	Group group;
+	PlotWorld plotWorld;
 	
-	public PlotRemovePage(Plot Plot){
-		plot=Plot;}
+	public PlotAddPage(Group Group, PlotWorld PlotWorld){
+		group=Group;
+		plotWorld=PlotWorld;}
 	protected void compositeAttachedAction(Connector connector){
-		NamePage namePage = new NamePage(plot.getName(), getHeight());
+		NamePage namePage = new NamePage(plotWorld.getName(), getHeight());
 		ControlsPage controlsPage = new ControlsPage(
 				()->{
-					PlotRemovePage thisPage = PlotRemovePage.this;
+					PlotAddPage thisPage = PlotAddPage.this;
 					thisPage.remove();}
-				, null , null, null, null, null, null, null);
-		PlotRemoveContentPage contentPage = new PlotRemoveContentPage(
-				plot
+				, null, null, null, null, null, null, null);
+		PlotAddContentPage contentPage = new PlotAddContentPage(
+				group
+				,plotWorld
 				, ()->{
-					return Icon.makeIcon(Textures.All).withName("All Plots").withCaption("All Plots").asIcon();});
+					return Icon.makeIcon(Textures.Users).withName("All Group Users").withCaption("All Group Users").asIcon();});
 		this.compose(namePage.makePageConnector(this.getSubBox(0, 0, 0, getHeight()-1)));
 		this.compose(controlsPage.makePageConnector(this.getSubBox(1, getHeight()-1, getWidth()-1, getHeight()-1)));
 		this.compose(contentPage.makePageConnector(this.getSubBox(1, 0, getWidth()-1, getHeight()-2)));}}

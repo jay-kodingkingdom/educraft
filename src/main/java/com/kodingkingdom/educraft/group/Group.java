@@ -14,16 +14,16 @@ import com.kodingkingdom.educraft.powers.powers.GameModeCreativePower;
 import com.kodingkingdom.educraft.powers.powers.GameModeSurvivalPower;
 import com.kodingkingdom.educraft.powers.powers.SuperSpeedPower;
 import com.kodingkingdom.educraft.powers.powers.TimeLockPower;
-import com.kodingkingdom.educraft.resources.Plot;
-import com.kodingkingdom.educraft.resources.World;
+import com.kodingkingdom.educraft.resources.PlotWorld;
+import com.kodingkingdom.educraft.resources.Area;
 
 public class Group implements Comparable<Group>{
 	String name;
 	
 	HashSet<Student> students;
 
-	HashSet<World> worlds;
-	HashSet<Plot> plots;
+	HashSet<Area> areas;
+	HashSet<PlotWorld> plotWorlds;
 	
 	HashSet<Task> tasks;
 	HashSet<Lock> locks;
@@ -32,10 +32,10 @@ public class Group implements Comparable<Group>{
 
 	public HashSet<Student> getStudents(){
 		return new HashSet<Student>(students);}
-	public HashSet<World> getWorlds(){
-		return new HashSet<World>(worlds);}
-	public HashSet<Plot> getPlots(){
-		return new HashSet<Plot>(plots);}
+	public HashSet<Area> getWorlds(){
+		return new HashSet<Area>(areas);}
+	public HashSet<PlotWorld> getPlots(){
+		return new HashSet<PlotWorld>(plotWorlds);}
 	public HashSet<Task> getTasks(){
 		return new HashSet<Task>(tasks);}
 	public HashSet<Lock> getLocks(){
@@ -45,10 +45,10 @@ public class Group implements Comparable<Group>{
 	
 	public void addStudents(Student... Students){
 		students.addAll(Arrays.asList(Students));}
-	public void addWorlds(World... Worlds){
-		worlds.addAll(Arrays.asList(Worlds));}
-	public void addPlots(Plot... Plots){
-		plots.addAll(Arrays.asList(Plots));}
+	public void addWorlds(Area... Worlds){
+		areas.addAll(Arrays.asList(Worlds));}
+	public void addPlots(PlotWorld... Plots){
+		plotWorlds.addAll(Arrays.asList(Plots));}
 	public void addTasks(Task... Tasks){
 		tasks.addAll(Arrays.asList(Tasks));}
 	public void addLocks(Lock... Locks){
@@ -58,10 +58,10 @@ public class Group implements Comparable<Group>{
 	
 	public void removeStudents(Student... Students){
 		students.removeAll(Arrays.asList(Students));}
-	public void removeWorlds(World... Worlds){
-		worlds.removeAll(Arrays.asList(Worlds));}
-	public void removePlots(Plot... Plots){
-		plots.removeAll(Arrays.asList(Plots));}
+	public void removeWorlds(Area... Worlds){
+		areas.removeAll(Arrays.asList(Worlds));}
+	public void removePlots(PlotWorld... Plots){
+		plotWorlds.removeAll(Arrays.asList(Plots));}
 	public void removeTasks(Task... Tasks){
 		tasks.removeAll(Arrays.asList(Tasks));}
 	public void removeLocks(Lock... Locks){
@@ -84,8 +84,8 @@ public class Group implements Comparable<Group>{
 		group.name=Name;
 		group.students=new HashSet<Student>();
 		group.tasks=new HashSet<Task>();
-		group.worlds=new HashSet<World>();
-		group.plots=new HashSet<Plot>();
+		group.areas=new HashSet<Area>();
+		group.plotWorlds=new HashSet<PlotWorld>();
 		group.locks=new HashSet<Lock>();
 		group.powers=new HashSet<Power>();
 		//
@@ -104,16 +104,16 @@ public class Group implements Comparable<Group>{
 		Group groupCopy = create(group.name);
 		groupCopy.students=new HashSet<Student>(group.students);
 		groupCopy.tasks=new HashSet<Task>(group.tasks);
-		groupCopy.worlds=new HashSet<World>(group.worlds);
-		groupCopy.plots=new HashSet<Plot>(group.plots);
+		groupCopy.areas=new HashSet<Area>(group.areas);
+		groupCopy.plotWorlds=new HashSet<PlotWorld>(group.plotWorlds);
 		groupCopy.locks=new HashSet<Lock>(group.locks);}
 	public static void delete(Group group){
 		groups.remove(group);
 
-		for (World world : group.worlds){
-			World.deleteWorld(world);}
-		for (Plot plot : group.plots){
-			Plot.deletePlot(plot);}
+		for (Area area : group.areas){
+			Area.deleteArea(area);}
+		for (PlotWorld plotWorld : group.plotWorlds){
+			PlotWorld.deletePlotWorld(plotWorld);}
 		for (Student student : group.students){
 			for (Task task : group.tasks){
 				task.ungive(student);}
@@ -124,8 +124,8 @@ public class Group implements Comparable<Group>{
 	public static void merge(Group group1, Group group2){
 		group1.students.addAll(group2.students);
 		group1.tasks.addAll(group2.tasks);
-		group1.worlds.addAll(group2.worlds);
-		group1.plots.addAll(group2.plots);
+		group1.areas.addAll(group2.areas);
+		group1.plotWorlds.addAll(group2.plotWorlds);
 		group1.locks.addAll(group2.locks);
 		Group.delete(group2);}
 	public int compareTo(Group o) {

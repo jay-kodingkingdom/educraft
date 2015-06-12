@@ -1,4 +1,4 @@
-package com.kodingkingdom.educraft.menu.groups.group.plots.plot.remove;
+package com.kodingkingdom.educraft.menu.groups.group.plotworlds.plot.remove;
 
 import java.util.function.Supplier;
 
@@ -9,19 +9,19 @@ import com.kodingkingdom.educraft.page.icons.Icon;
 import com.kodingkingdom.educraft.page.icons.Icon.Textures;
 import com.kodingkingdom.educraft.page.select.SelectItem;
 import com.kodingkingdom.educraft.page.select.selects.SelectFunctionSortedAllPage;
-import com.kodingkingdom.educraft.resources.Plot;
-import com.kodingkingdom.educraft.resources.Plot.PlotItem;
+import com.kodingkingdom.educraft.resources.PlotWorld;
+import com.kodingkingdom.educraft.resources.PlotWorld.PlotItem;
 
 public class PlotRemoveContentPage extends SelectFunctionSortedAllPage<PlotItem>{
 
-	public PlotRemoveContentPage(Plot Plot, Supplier<ItemStack> PlotsIcon) {
+	public PlotRemoveContentPage(PlotWorld PlotWorld, Supplier<ItemStack> PlotsIcon) {
 		super(
 			()->{
-				return Plot.getPlotItems();}
+				return PlotWorld.getPlots();}
 			,plotItem->{
 				return new SelectItem(
 						()->{
-							Plot.takePlot(plotItem);}
-						,Icon.makeIcon(Textures.Plots).withName(plotItem.getId())
+							PlotWorld.takePlot(plotItem);}
+						,Icon.makeIcon(Textures.PlotWorlds).withName(plotItem.getId())
 												.withCaption(plotItem.getStudent().getName()).asIcon());}
 			, PlotsIcon, Bible.pollInterval);}}

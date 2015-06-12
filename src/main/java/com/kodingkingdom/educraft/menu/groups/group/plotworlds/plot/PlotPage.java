@@ -1,22 +1,22 @@
-package com.kodingkingdom.educraft.menu.groups.group.plots.plot;
+package com.kodingkingdom.educraft.menu.groups.group.plotworlds.plot;
 
 import com.kodingkingdom.educraft.group.Group;
-import com.kodingkingdom.educraft.menu.groups.group.plots.plot.add.PlotAddPage;
-import com.kodingkingdom.educraft.menu.groups.group.plots.plot.remove.PlotRemovePage;
+import com.kodingkingdom.educraft.menu.groups.group.plotworlds.plot.add.PlotAddPage;
+import com.kodingkingdom.educraft.menu.groups.group.plotworlds.plot.remove.PlotRemovePage;
 import com.kodingkingdom.educraft.menu.groups.group.powers.power.PowerPage;
 import com.kodingkingdom.educraft.menu.menus.ControlsPage;
 import com.kodingkingdom.educraft.menu.menus.NamePage;
 import com.kodingkingdom.educraft.page.CompositeBoxPage;
-import com.kodingkingdom.educraft.resources.Plot;
+import com.kodingkingdom.educraft.resources.PlotWorld;
 
 public class PlotPage extends CompositeBoxPage {
 	Group group;
-	Plot plot;
-	public PlotPage(Group Group, Plot Plot){
+	PlotWorld plotWorld;
+	public PlotPage(Group Group, PlotWorld PlotWorld){
 		group = Group;
-		plot=Plot;}
+		plotWorld=PlotWorld;}
 	protected void compositeAttachedAction(Connector connector){
-		NamePage namePage = new NamePage(plot.getName(), getHeight());
+		NamePage namePage = new NamePage(plotWorld.getName(), getHeight());
 		ControlsPage controlsPage = new ControlsPage(
 				()->{
 					PlotPage thisPage = PlotPage.this; 
@@ -24,15 +24,15 @@ public class PlotPage extends CompositeBoxPage {
 				, null
 				, ()->{
 					PlotPage thisPage = PlotPage.this; 
-					PlotAddPage newPage = new PlotAddPage(group, plot);
+					PlotAddPage newPage = new PlotAddPage(group, plotWorld);
 					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
 				, ()->{
 					PlotPage thisPage = PlotPage.this; 
-					PlotRemovePage newPage = new PlotRemovePage (plot);
+					PlotRemovePage newPage = new PlotRemovePage (plotWorld);
 					thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
 				, null, null, null, null);
 		PlotContentPage contentPage = new PlotContentPage(
-				plot,
+				plotWorld,
 				plotItem->{
 					PlotPage thisPage = PlotPage.this; 
 					PowerPage newPage = new PowerPage(group, plotItem.getTeleporter());

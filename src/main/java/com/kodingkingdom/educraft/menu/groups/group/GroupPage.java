@@ -2,12 +2,12 @@
 package com.kodingkingdom.educraft.menu.groups.group;
 
 import com.kodingkingdom.educraft.group.Group;
+import com.kodingkingdom.educraft.menu.groups.group.areas.AreasPage;
 import com.kodingkingdom.educraft.menu.groups.group.locks.LocksPage;
-import com.kodingkingdom.educraft.menu.groups.group.plots.PlotsPage;
+import com.kodingkingdom.educraft.menu.groups.group.plotworlds.PlotWorldsPage;
 import com.kodingkingdom.educraft.menu.groups.group.powers.PowersPage;
 import com.kodingkingdom.educraft.menu.groups.group.students.StudentsPage;
 import com.kodingkingdom.educraft.menu.groups.group.tasks.TasksPage;
-import com.kodingkingdom.educraft.menu.groups.group.worlds.WorldsPage;
 import com.kodingkingdom.educraft.menu.menus.ControlsPage;
 import com.kodingkingdom.educraft.menu.menus.NamePage;
 import com.kodingkingdom.educraft.page.CompositeBoxPage;
@@ -56,15 +56,15 @@ public class GroupPage extends CompositeBoxPage {
 											,new SelectItem(
 													()->{
 														GroupPage thisPage = GroupPage.this; 
-														WorldsPage newPage = new WorldsPage(group);
+														AreasPage newPage = new AreasPage(group);
 														thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
-													,Icon.makeIcon("Worlds").asIcon())
+													,Icon.makeIcon("Areas").asIcon())
 											,new SelectItem(
 													()->{
 														GroupPage thisPage = GroupPage.this; 
-														PlotsPage newPage = new PlotsPage(group);
+														PlotWorldsPage newPage = new PlotWorldsPage(group);
 														thisPage.attach(newPage.makePageConnector(thisPage.getSubBox(0,0,getWidth()-1, getHeight()-1)));}
-													,Icon.makeIcon("Plots").asIcon()));
+													,Icon.makeIcon("PlotWorlds").asIcon()));
 		this.compose(namePage.makePageConnector(this.getSubBox(0, 0, 0, getHeight()-1)));
 		this.compose(controlsPage.makePageConnector(this.getSubBox(1, getHeight()-1, getWidth()-1, getHeight()-1)));
 		this.compose(contentPage.makePageConnector(this.getSubBox(1, 0, getWidth()-1, getHeight()-2)));}}

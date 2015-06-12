@@ -20,7 +20,7 @@ public class PowersRemoveContentPage extends SelectFunctionSortedAllPage<Power>{
 		super(
 			()->{
 				return Group.getPowers().stream()
-						.filter(power->power instanceof PlayerTeleportPower &&
+						.filter(power->power instanceof PlayerTeleportPower ||
 										power instanceof LocationTeleportPower)
 						.collect(Collectors.toList());}
 			,(Power power)->{

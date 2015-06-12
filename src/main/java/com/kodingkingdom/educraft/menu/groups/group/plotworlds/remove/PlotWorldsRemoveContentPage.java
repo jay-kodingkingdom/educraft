@@ -1,4 +1,4 @@
-package com.kodingkingdom.educraft.menu.groups.group.plots.remove;
+package com.kodingkingdom.educraft.menu.groups.group.plotworlds.remove;
 
 import java.util.function.Supplier;
 
@@ -10,11 +10,11 @@ import com.kodingkingdom.educraft.page.icons.Icon;
 import com.kodingkingdom.educraft.page.icons.Icon.Textures;
 import com.kodingkingdom.educraft.page.select.SelectItem;
 import com.kodingkingdom.educraft.page.select.selects.SelectFunctionSortedAllPage;
-import com.kodingkingdom.educraft.resources.Plot;
+import com.kodingkingdom.educraft.resources.PlotWorld;
 
-public class PlotsRemoveContentPage extends SelectFunctionSortedAllPage<Plot>{
+public class PlotWorldsRemoveContentPage extends SelectFunctionSortedAllPage<PlotWorld>{
 
-	public PlotsRemoveContentPage(Group Group, Supplier<ItemStack> PlotsIcon) {
+	public PlotWorldsRemoveContentPage(Group Group, Supplier<ItemStack> PlotsIcon) {
 		super(
 			()->{
 				return Group.getPlots();}
@@ -22,5 +22,5 @@ public class PlotsRemoveContentPage extends SelectFunctionSortedAllPage<Plot>{
 				return new SelectItem(
 						()->{
 							Group.removePlots(plot);}
-						,Icon.makeIcon(Textures.Plots).withName(plot.getName()).withCaption(plot.getName()).asIcon());}
+						,Icon.makeIcon(Textures.PlotWorlds).withName(plot.getName()).withCaption(plot.getName()).asIcon());}
 			, PlotsIcon, Bible.pollInterval);}}

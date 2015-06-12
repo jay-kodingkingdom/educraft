@@ -23,6 +23,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.kodingkingdom.craftercoordinator.CrafterRegion;
+import com.kodingkingdom.educraft.EduCraftPlugin;
 import com.kodingkingdom.educraft.group.users.Student;
 import com.kodingkingdom.educraft.powers.powers.LocationTeleportPower;
 import com.onarandombox.MultiverseCore.MultiverseCore;
@@ -31,26 +32,30 @@ import com.worldcretornica.plotme.PlotMapInfo;
 import com.worldcretornica.plotme.PlotMe;
 import com.worldcretornica.plotme.SqlManager;
 
-public class Plot implements Comparable<Plot>{
+public class PlotWorld implements Comparable<PlotWorld>{
 	private static MultiverseCore multiverseCore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
 	private static PlotMe plotMe = (PlotMe) Bukkit.getServer().getPluginManager().getPlugin("PlotMe");
 	
-	private static HashMap<String, Plot> plots =new HashMap<String, Plot>();//;
+	private static HashMap<String, PlotWorld> plotWorlds =new HashMap<String, PlotWorld>();//;
 	
 	private String name;
 	public String getName(){
 		return name;}
 
-	public static HashSet<Plot> getPlots(){
-		return new HashSet<Plot> (plots.values());}	
+	private static void addPlotWorld(PlotWorld plotWorld){
+		plotWorlds.put(plotWorld.name,plotWorld);}	
+	private static void removePlotWorld(PlotWorld plotWorld){
+		plotWorlds.remove(plotWorld.name);}	
+	public static HashSet<PlotWorld> getPlotWorlds(){
+		return new HashSet<PlotWorld> (plotWorlds.values());}	
 		
-	public static Plot createPlot(String Name){
+	public static PlotWorld createPlotWorld(String Name){
 
-		if (plots.containsKey(Name)) throw new RuntimeException();
+		if (plotWorlds.containsKey(Name)) throw new RuntimeException();
 		
-		Plot plot = new Plot();
+		PlotWorld plotWorld = new PlotWorld();
 		
-		plot.name=Name;
+		plotWorld.name=Name;
 
 		if (! multiverseCore.getMVWorldManager().addWorld(Name,Environment.NORMAL,"",WorldType.FLAT,false,"PlotMe",false))
 				throw new RuntimeException();
@@ -73,10 +78,10 @@ public class Plot implements Comparable<Plot>{
 
 		ConfigurationSection worlds;
 		
-		if(!config.contains("worlds"))
-			worlds = config.createSection("worlds");
+		if(!config.contains("areas"))
+			worlds = config.createSection("areas");
 		else
-			worlds = config.getConfigurationSection("worlds");
+			worlds = config.getConfigurationSection("areas");
 
 		List<Integer> defaultProtectedBlocks = new ArrayList<Integer>();
 		List<String> defaultPreventedBlocks = new ArrayList<String>();
@@ -107,7 +112,7 @@ public class Plot implements Comparable<Plot>{
 		defaultPreventedBlocks.add("" + Material.HOPPER_MINECART.getId());
 		defaultPreventedBlocks.add("" + Material.BOAT.getId());
 		
-		ConfigurationSection plotworld = worlds.createSection(plot.name);
+		ConfigurationSection plotworld = worlds.createSection(plotWorld.name);
 		
 		plotworld.set("PlotAutoLimit", 1000);
 		plotworld.set("PathWidth", 7);
@@ -157,7 +162,7 @@ public class Plot implements Comparable<Plot>{
 		plotworld.set("economy", economysection);
 		
 		worlds.set("plotworld", plotworld);
-		config.set("worlds", worlds);
+		config.set("areas", worlds);
 		
 
 		try{
@@ -167,31 +172,31 @@ public class Plot implements Comparable<Plot>{
 		
 		plotMe.initialize();
 		
-		plots.put(Name,plot);
+		addPlotWorld(plotWorld);
 		
-		return plot;}
-	public static Plot copyPlot(Plot plot, String Name){
-		if (plots.containsKey(Name)) throw new RuntimeException();
+		return plotWorld;}
+	public static PlotWorld clonePlotWorld(PlotWorld plotWorld, String Name){
+		if (plotWorlds.containsKey(Name)) throw new RuntimeException();
 		
-		Plot newPlot  = new Plot();
+		PlotWorld newPlot  = new PlotWorld();
 		
 		newPlot.name=Name;
 
 		if (! multiverseCore.getMVWorldManager().cloneWorld(newPlot.name, Name, "PlotMe"))
 				throw new RuntimeException();
 		
-		plots.put(Name, newPlot);
+		addPlotWorld(newPlot);
 		
 		return newPlot;}
-	public static void deletePlot(Plot plot){
-		multiverseCore.getMVWorldManager().deleteWorld(plot.name, true, true);
-		plots.remove(plot);}
+	public static void deletePlotWorld(PlotWorld plotWorld){
+		multiverseCore.getMVWorldManager().deleteWorld(plotWorld.name, true, true);
+		removePlotWorld(plotWorld);}
 	
 		
 	
 	
 	private HashMap<Student, HashSet<PlotItem>> studentPlotsMap=new HashMap<Student, HashSet<PlotItem>> ();
-	public HashSet<PlotItem> getPlotItems(){
+	public HashSet<PlotItem> getPlots(){
 		return studentPlotsMap.values().stream()
 				.flatMap(plots->plots.stream())
 				.collect(Collectors.toCollection(HashSet::new));}
@@ -199,7 +204,7 @@ public class Plot implements Comparable<Plot>{
 	public final PlotItem givePlot(Student student){
 		return givePlot(new Student[]{student})[0];}
 	public final PlotItem[] givePlot(Student... students){
-		org.bukkit.World plotMV = Bukkit.getServer().createWorld(new WorldCreator(name));
+		org.bukkit.World plotWorld = Bukkit.getServer().createWorld(new WorldCreator(name));
 		
 		PlotItem[] plotItems=new PlotItem[students.length];
 		
@@ -210,14 +215,21 @@ getPlot:
 					for (int z = -i; z <= i; z++) {
 						String id = "" + x + ";" + z;
 
-						if (PlotManager.isPlotAvailable(id, plotMV) &&
+						boolean cond1=PlotManager.isPlotAvailable(id, plotWorld);
+						boolean cond2=PlotManager.getCoordinator().checkPlayerLimit(students[j].getId());
+						boolean cond3=PlotManager.getCoordinator().checkPlotLimit(
+									new CrafterRegion(PlotManager.getPlotBottomLoc(plotWorld, id), PlotManager.getPlotTopLoc(plotWorld, id)));
+						
+						EduCraftPlugin.debug("1: "+cond1+", 2: "+cond2+", 3: "+cond3);
+						
+						if (PlotManager.isPlotAvailable(id, plotWorld) &&
 								(PlotManager.getCoordinator().checkPlayerLimit(students[j].getId())||
 								PlotManager.getCoordinator().checkPlotLimit(
-									new CrafterRegion(PlotManager.getPlotBottomLoc(plotMV, id), PlotManager.getPlotTopLoc(plotMV, id))))) {
+									new CrafterRegion(PlotManager.getPlotBottomLoc(plotWorld, id), PlotManager.getPlotTopLoc(plotWorld, id))))) {
 							String name = students[j].getName();
 							UUID uuid = students[j].getId();
 
-							PlotManager.createPlot(plotMV, id, name, uuid);
+							PlotManager.createPlot(plotWorld, id, name, uuid);
 							
 							PlotItem plotItem = new PlotItem();
 							
@@ -233,22 +245,22 @@ getPlot:
 		
 		return plotItems;}
 	public final void takePlot(PlotItem... plotItems){
-		org.bukkit.World plotMV = Bukkit.getServer().createWorld(new WorldCreator(name));
+		org.bukkit.World plotWorld = Bukkit.getServer().createWorld(new WorldCreator(name));
 
 		for (PlotItem plotItem : plotItems){
 			com.worldcretornica.plotme.Plot plot = PlotManager.getPlotById(name,plotItem.plotId);
 			
 			String id = plot.id;
 
-			PlotManager.setBiome(plotMV, id, plot, Biome.PLAINS);
-			PlotManager.clear(plotMV, plot);
+			PlotManager.setBiome(plotWorld, id, plot, Biome.PLAINS);
+			PlotManager.clear(plotWorld, plot);
 
 			PlotManager.getPlots(plotItem.getStudent().getPlayer()).remove(id);
 
-			PlotManager.removeOwnerSign(plotMV, id);
-			PlotManager.removeSellSign(plotMV, id);
+			PlotManager.removeOwnerSign(plotWorld, id);
+			PlotManager.removeSellSign(plotWorld, id);
 
-			SqlManager.deletePlot(PlotManager.getIdX(id), PlotManager.getIdZ(id), plotMV.getName().toLowerCase());
+			SqlManager.deletePlot(PlotManager.getIdX(id), PlotManager.getIdZ(id), plotWorld.getName().toLowerCase());
 
 			studentPlotsMap.get(plotItem.getStudent()).remove(plotItem);}}	
 	
@@ -261,35 +273,35 @@ getPlot:
 		private PlotItem(){}
 
 		public void allow(Student student){
-			com.worldcretornica.plotme.Plot plot = PlotManager.getPlotById(Plot.this.name, plotId);
+			com.worldcretornica.plotme.Plot plot = PlotManager.getPlotById(PlotWorld.this.name, plotId);
 			String allowed = student.getName();
 			plot.addAllowed(allowed);
 			plot.removeDenied(allowed);}
 		
 		public void deny(Student student){
-			com.worldcretornica.plotme.Plot plot = PlotManager.getPlotById(Plot.this.name, plotId);
+			com.worldcretornica.plotme.Plot plot = PlotManager.getPlotById(PlotWorld.this.name, plotId);
 			String denied = student.getName();
 			plot.addDenied(denied);
 			plot.removeAllowed(denied);}		
 
 		public LocationTeleportPower getTeleporter(){
 			if (plotTeleporter==null){ 
-				org.bukkit.World MV = Bukkit.getServer().createWorld(new WorldCreator(Plot.this.name));
-				PlotMapInfo pmi = PlotManager.getMap(MV);
-				com.worldcretornica.plotme.Plot plot = PlotManager.getPlotById(Plot.this.name, plotId);
-				plotTeleporter = new LocationTeleportPower(new Location(MV, PlotManager.bottomX(plot.id, MV) + (PlotManager.topX(plot.id, MV) - PlotManager.bottomX(plot.id, MV))/2, pmi.RoadHeight + 2, PlotManager.bottomZ(plot.id, MV) - 2));}
+				org.bukkit.World world = Bukkit.getServer().createWorld(new WorldCreator(PlotWorld.this.name));
+				PlotMapInfo pmi = PlotManager.getMap(world);
+				com.worldcretornica.plotme.Plot plot = PlotManager.getPlotById(PlotWorld.this.name, plotId);
+				plotTeleporter = new LocationTeleportPower(new Location(world, PlotManager.bottomX(plot.id, world) + (PlotManager.topX(plot.id, world) - PlotManager.bottomX(plot.id, world))/2, pmi.RoadHeight + 2, PlotManager.bottomZ(plot.id, world) - 2));}
 			return plotTeleporter;}
 		public String getId(){
 			return plotId;}
 		public Student getStudent(){
 			return plotStudent;}
-		public Plot getPlot(){
-			return Plot.this;}
+		public PlotWorld getPlot(){
+			return PlotWorld.this;}
 
 		@Override
 		public int compareTo(PlotItem o) {
 			return plotId.compareTo(o.plotId);}}
 
 	@Override
-	public int compareTo(Plot o) {
+	public int compareTo(PlotWorld o) {
 		return name.compareTo(o.name);}}

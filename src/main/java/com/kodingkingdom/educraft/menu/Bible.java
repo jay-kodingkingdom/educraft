@@ -3,15 +3,19 @@ package com.kodingkingdom.educraft.menu;
 import java.util.UUID;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.kodingkingdom.educraft.EduCraftPlugin;
 import com.kodingkingdom.educraft.group.User;
+import com.kodingkingdom.educraft.group.users.Teacher;
 import com.kodingkingdom.educraft.menu.groups.GroupsPage;
 import com.kodingkingdom.educraft.page.Menu;
 import com.kodingkingdom.educraft.page.icons.Icon;
 
-public class Bible {
+public class Bible implements Listener{
 	Menu bible;
 	public ItemStack getIcon(){
 		return menuIcon.clone();}
@@ -29,4 +33,10 @@ public class Bible {
 		EduCraftPlugin.debug("bible is "+bible);
 		
 		GroupsPage allGroupsPage = new GroupsPage(); 
-		bible.attach(allGroupsPage.makePageConnector(bible.getSubBox(0, 0, 8, 5)));}}
+		bible.attach(allGroupsPage.makePageConnector(bible.getSubBox(0, 0, 8, 5)));
+
+		EduCraftPlugin.getPlugin().getEduCraft().registerEvents(this);}
+	
+	public void collectBible(PlayerQuitEvent e){
+		Player player = e.getPlayer();
+		player.getInventory().remove(menuIcon);}}

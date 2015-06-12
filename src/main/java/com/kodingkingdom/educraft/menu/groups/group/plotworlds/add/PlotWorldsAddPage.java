@@ -1,5 +1,5 @@
 
-package com.kodingkingdom.educraft.menu.groups.group.plots.add;
+package com.kodingkingdom.educraft.menu.groups.group.plotworlds.add;
 
 import org.bukkit.entity.Player;
 
@@ -8,41 +8,41 @@ import com.kodingkingdom.educraft.menu.menus.ControlsPage;
 import com.kodingkingdom.educraft.menu.menus.VaryNamePage;
 import com.kodingkingdom.educraft.page.CompositeBoxPage;
 import com.kodingkingdom.educraft.page.Menu;
-import com.kodingkingdom.educraft.resources.Plot;
+import com.kodingkingdom.educraft.resources.PlotWorld;
 ;
 
-public class PlotsAddPage extends CompositeBoxPage {
+public class PlotWorldsAddPage extends CompositeBoxPage {
 	Group group;
 	String plotName = "";
-	public PlotsAddPage(Group Group){
+	public PlotWorldsAddPage(Group Group){
 		group=Group;}
 	protected void compositeAttachedAction(Connector connector){
 		VaryNamePage namePage = new VaryNamePage(()->{return plotName;}, getHeight());
 		ControlsPage controlsPage = new ControlsPage(
 				()->{
-					PlotsAddPage thisPage = PlotsAddPage.this;
+					PlotWorldsAddPage thisPage = PlotWorldsAddPage.this;
 					thisPage.remove();}
 				, null, null, null, null
 				, ()->{
 					plotName=(!plotName.equals("")?plotName.substring(0, plotName.length()-1):"");}
 				, null
 				, ()->{
-					PlotsAddPage thisPage = PlotsAddPage.this;
+					PlotWorldsAddPage thisPage = PlotWorldsAddPage.this;
 					if (!plotName.equals("") &&
-							!Plot.getPlots().stream()
+							!PlotWorld.getPlotWorlds().stream()
 							.anyMatch(
-									(Plot plot) -> {
-										return plotName.equals(plot.getName());})){
+									(PlotWorld plotWorld) -> {
+										return plotName.equals(plotWorld.getName());})){
 						
 						Player player = Menu.getMenu(thisPage).getUser().getPlayer();
 						group.addPlots(
-								Plot.createPlot(plotName));
-						player.sendMessage("Plot "+plotName+" has been created!");
+								PlotWorld.createPlotWorld(plotName));
+						player.sendMessage("PlotWorld "+plotName+" has been created!");
 						thisPage.remove();}
 					else {
 						Player player = Menu.getMenu(thisPage).getUser().getPlayer();
-						player.sendMessage("Plot "+plotName+" already exists!");}});
-		PlotsAddContentPage contentPage = new PlotsAddContentPage(
+						player.sendMessage("PlotWorld "+plotName+" already exists!");}});
+		PlotWorldsAddContentPage contentPage = new PlotWorldsAddContentPage(
 				letter->{
 					String newGroupName = plotName + letter;
 					if (newGroupName.length()<=getHeight()) plotName=newGroupName;}

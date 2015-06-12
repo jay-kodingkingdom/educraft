@@ -21,14 +21,14 @@ import com.wimbli.WorldBorder.CoordXZ;
 import com.wimbli.WorldBorder.WorldBorder;
 import com.wimbli.WorldBorder.WorldTrimTask;
 
-public class World implements Comparable<World>{
+public class Area implements Comparable<Area>{
 	private static MultiverseCore multiverseCore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
 	private static String universeId = "eduCraft_universe";
 	
 	public static String getUniverseId(){
 		return universeId;}
 
-	private static HashSet<World> worlds;
+	private static HashSet<Area> areas;
 	
 	
 	private static Region worldsRegion;
@@ -37,12 +37,12 @@ public class World implements Comparable<World>{
 	
 	
 	
-	public class WorldItem{
+	public class AreaCopy{
 		String worldId;
 		Student worldStudent;
 		LocationTeleportPower worldTeleporter=null;
 		
-		private WorldItem(){}
+		private AreaCopy(){}
 				
 		public LocationTeleportPower getTeleporter(){
 			if (worldTeleporter==null){ 
@@ -51,8 +51,8 @@ public class World implements Comparable<World>{
 			return worldTeleporter;}
 		public Student getStudent(){
 			return worldStudent;}
-		public World getWorld(){
-			return World.this;}}
+		public Area getWorld(){
+			return Area.this;}}
 	
 	
 	
@@ -111,28 +111,28 @@ public class World implements Comparable<World>{
 	
 	
 	public static XZ xZ(float X, float Z){
-		return new World().new XZ(X,Z);}
+		return new Area().new XZ(X,Z);}
 	public static Region region(XZ MinXZ, XZ MaxXZ){
-		return new World().new Region(MinXZ,MaxXZ);}
+		return new Area().new Region(MinXZ,MaxXZ);}
 	public static Position position(float X, float Z, float Y){
-		return new World().new Position(X,Z,Y);}
+		return new Area().new Position(X,Z,Y);}
 
 
-	private World(){}
+	private Area(){}
 	
 	private String name;
 	private Region region;
 	private Position spawnPoint;
 
-	private HashMap<Student,HashSet<WorldItem>> studentWorldsMap;
+	private HashMap<Student,HashSet<AreaCopy>> studentWorldsMap;
 
 	
 	
 	
-	public static World createWorld(String Name, Region MVRegion, String MVId, Position SpawnPoint){
-		World world = new World();
+	public static Area createArea(String Name, Region MVRegion, String MVId, Position SpawnPoint){
+		Area area = new Area();
 		
-		world.name=Name;
+		area.name=Name;
 		
 		Region worldRegion=worldsRegion.insert(MVRegion.maxXZ.minus(MVRegion.minXZ));
 		while (worldRegion==null){
@@ -142,61 +142,61 @@ public class World implements Comparable<World>{
 		org.bukkit.World MV = Bukkit.getServer().createWorld(new WorldCreator(MVId));
 		org.bukkit.World universeMV = Bukkit.getServer().createWorld(new WorldCreator(universeId));
 		
-		world.copyRegion(MVRegion.minXZ,worldRegion.minXZ,
+		area.copyRegion(MVRegion.minXZ,worldRegion.minXZ,
 				MVRegion.maxXZ.minus(MVRegion.minXZ),
 				MV,universeMV);
 		
-		world.region=worldRegion;
-		world.spawnPoint=world.new Position(SpawnPoint.X+worldRegion.minXZ.minus(MVRegion.minXZ).X,
+		area.region=worldRegion;
+		area.spawnPoint=area.new Position(SpawnPoint.X+worldRegion.minXZ.minus(MVRegion.minXZ).X,
 				SpawnPoint.Y,SpawnPoint.Z+worldRegion.minXZ.minus(MVRegion.minXZ).Z);
 		
-		worlds.add(world);
+		areas.add(area);
 		
-		return world;}
-	public static World copyWorld(World world, String Name){
-		return createWorld(Name, world.region, universeId, world.spawnPoint);}
-	public static void deleteWorld(World world){
+		return area;}
+	public static Area cloneArea(Area area, String Name){
+		return createArea(Name, area.region, universeId, area.spawnPoint);}
+	public static void deleteArea(Area area){
 		org.bukkit.World universeMV = Bukkit.getServer().createWorld(new WorldCreator(universeId));
 		
-		world.deleteRegion(world.region, universeMV);
+		area.deleteRegion(area.region, universeMV);
 		
-		world.name=null;
-		world.region=null;
-		world.spawnPoint=null;
-		world.studentWorldsMap=null;
+		area.name=null;
+		area.region=null;
+		area.spawnPoint=null;
+		area.studentWorldsMap=null;
 		
-		worlds.remove(world);}
+		areas.remove(area);}
 	
 	
 	
 
-	public final WorldItem giveWorld(Student worldStudent){
+	public final AreaCopy giveCopy(Student worldStudent){
 		try {
-			WorldItem worldItem=prepareWorld(worldStudent)[0];
+			AreaCopy areaCopy=prepareCopy(worldStudent)[0];
 			
-			studentWorldsMap.get(worldStudent).add(worldItem);
-			return worldItem;}
+			studentWorldsMap.get(worldStudent).add(areaCopy);
+			return areaCopy;}
 		catch (Exception e){
 			throw new RuntimeException("Could not create world");}}
-	public final WorldItem[] giveWorld(Student... worldStudents){
+	public final AreaCopy[] giveCopy(Student... worldStudents){
 		try {
-			WorldItem[] worldItems=prepareWorld(worldStudents);
+			AreaCopy[] worldItems=prepareCopy(worldStudents);
 			
-			for (WorldItem worldItem : worldItems) studentWorldsMap.get(worldItem.worldStudent).add(worldItem);
+			for (AreaCopy areaCopy : worldItems) studentWorldsMap.get(areaCopy.worldStudent).add(areaCopy);
 			return worldItems;}
 		catch (Exception e){
-			throw new RuntimeException("Could not create worlds");}}
-	public final void takeWorld(WorldItem... worldItems){
-		for (WorldItem worldItem : worldItems){
-			com.wimbli.WorldBorder.Config.removeBorder(worldItem.worldId);
-			multiverseCore.getMVWorldManager().deleteWorld(worldItem.worldId, true, true);
-			studentWorldsMap.get(worldItem.getStudent()).remove(worldItem);}}	
+			throw new RuntimeException("Could not create areas");}}
+	public final void takeCopy(AreaCopy... worldItems){
+		for (AreaCopy areaCopy : worldItems){
+			com.wimbli.WorldBorder.Config.removeBorder(areaCopy.worldId);
+			multiverseCore.getMVWorldManager().deleteWorld(areaCopy.worldId, true, true);
+			studentWorldsMap.get(areaCopy.getStudent()).remove(areaCopy);}}	
 	
 	
 	
 	
-	private final WorldItem[] prepareWorld(Student... worldStudents){
-		WorldItem[] worldItems = new WorldItem[worldStudents.length]; 
+	private final AreaCopy[] prepareCopy(Student... worldStudents){
+		AreaCopy[] worldItems = new AreaCopy[worldStudents.length]; 
 		
 		final org.bukkit.World universeMV = Bukkit.getServer().createWorld(new WorldCreator(universeId));
 		final float widthX = (region.maxXZ.minus(region.minXZ)).X;
@@ -207,13 +207,13 @@ public class World implements Comparable<World>{
 		String masterWorldId=null;
 		
 		for (int i=0; i<worldStudents.length; i++){
-			WorldItem worldItem = new WorldItem();
-			worldItems[i] = worldItem;
+			AreaCopy areaCopy = new AreaCopy();
+			worldItems[i] = areaCopy;
 			
 			String worldId = String.format("eduCraft_world_%1$s_%2$s_%3$s",name,worldStudents[i].getId().toString(),UUID.randomUUID().toString());
 			
-			worldItem.worldId = worldId;
-			worldItem.worldStudent = worldStudents[i];
+			areaCopy.worldId = worldId;
+			areaCopy.worldStudent = worldStudents[i];
 					
 			if (i==0){
 				if (! multiverseCore.getMVWorldManager().addWorld(worldId,Environment.NORMAL,"",WorldType.FLAT,false,"",false))
@@ -229,7 +229,7 @@ public class World implements Comparable<World>{
 				masterWorldId=worldId;				
 
 				com.wimbli.WorldBorder.Config.setBorderCorners(worldId, -widthX, -lengthZ, widthX, lengthZ, false);
-				trimWorld(masterWorldId);}
+				trimCopy(masterWorldId);}
 			else {
 				if (! multiverseCore.getMVWorldManager().cloneWorld(masterWorldId, worldId, "")){
 						throw new RuntimeException();}
@@ -259,7 +259,7 @@ public class World implements Comparable<World>{
 				for(int Y = 0; Y < MV.getMaxHeight() ; Y++){
 					MV.getBlockAt(new Location(MV, X, Y, Z))
 						.setType(Material.AIR, false);}}}}
-	private final void trimWorld(String worldId){
+	private final void trimCopy(String worldId){
 		int trimFrequency = 5000;
 		int trimPadding = CoordXZ.chunkToBlock(13);
 		int ticks = 1, repeats = 1;
@@ -275,5 +275,5 @@ public class World implements Comparable<World>{
 		else
 			throw new RuntimeException();}
 	@Override
-	public int compareTo(World o) {
+	public int compareTo(Area o) {
 		return name.compareTo(o.name);}}

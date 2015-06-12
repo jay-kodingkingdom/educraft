@@ -18,5 +18,5 @@ public class EduCraftPlugin extends JavaPlugin implements Listener{
     public EduCraftPlugin(){instance=this;}
     public static EduCraftPlugin getPlugin(){return instance;}
     public static void debug(String msg){
-    	instance.getLogger().log(Level.INFO//Level.FINE
+    	instance.getLogger().log(Level.FINE
     			, msg);}}

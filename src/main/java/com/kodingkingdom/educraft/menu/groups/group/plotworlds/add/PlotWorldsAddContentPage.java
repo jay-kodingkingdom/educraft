@@ -1,4 +1,4 @@
-package com.kodingkingdom.educraft.menu.groups.group.plots.add;
+package com.kodingkingdom.educraft.menu.groups.group.plotworlds.add;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -8,7 +8,7 @@ import com.kodingkingdom.educraft.page.icons.Icon;
 import com.kodingkingdom.educraft.page.select.SelectItem;
 import com.kodingkingdom.educraft.page.select.selects.SelectItemsPage;
 
-public class PlotsAddContentPage extends SelectItemsPage{
+public class PlotWorldsAddContentPage extends SelectItemsPage{
 
 	private static SelectItem[][] makeSelectItems(Consumer<String> groupAddContentAction, int width, int height){
 		SelectItem[][] selectItems = new SelectItem[height][width];
@@ -26,5 +26,5 @@ public class PlotsAddContentPage extends SelectItemsPage{
 					selectItems[heightY][widthX]=SelectItem.Null;}}}
 		return selectItems;}
 	
-	public PlotsAddContentPage(Consumer<String> groupAddContentAction, int width, int height) {
+	public PlotWorldsAddContentPage(Consumer<String> groupAddContentAction, int width, int height) {
 		super(makeSelectItems(groupAddContentAction, width, height));}}
