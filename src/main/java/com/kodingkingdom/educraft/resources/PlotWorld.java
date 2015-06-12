@@ -78,10 +78,10 @@ public class PlotWorld implements Comparable<PlotWorld>{
 
 		ConfigurationSection worlds;
 		
-		if(!config.contains("areas"))
-			worlds = config.createSection("areas");
+		if(!config.contains("worlds"))
+			worlds = config.createSection("worlds");
 		else
-			worlds = config.getConfigurationSection("areas");
+			worlds = config.getConfigurationSection("worlds");
 
 		List<Integer> defaultProtectedBlocks = new ArrayList<Integer>();
 		List<String> defaultPreventedBlocks = new ArrayList<String>();
@@ -162,7 +162,7 @@ public class PlotWorld implements Comparable<PlotWorld>{
 		plotworld.set("economy", economysection);
 		
 		worlds.set("plotworld", plotworld);
-		config.set("areas", worlds);
+		config.set("worlds", worlds);
 		
 
 		try{
